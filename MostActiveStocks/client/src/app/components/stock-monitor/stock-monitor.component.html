@@ -1,0 +1,31 @@
+<h4>Refresh in {{secondsRemaining}} seconds 
+    <a class="glyphicon glyphicon-question-sign" 
+        id="info" title="Stock Hours" 
+        popover="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  Data will not refresh outside of these hours."
+        [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
+    </a>
+</h4>
+<div class="bar">
+    <input type="text" placeholder="Enter a company name filter" [(ngModel)]="companyFilter" (click)="showMoreDetail=false" />
+</div>
+<div class="container">
+    <table class="table-striped" id="stock-table">
+        <tr>
+            <td> Company Name </td>
+            <td> Symbol </td>
+            <td> Latest Price </td>
+        </tr>
+        <tr *ngFor="let x of stocks | filter:companyFilter | sort:stocks">
+            <td>{{ x.companyName }}</td>
+            <td><a (click)="getTickerInfo(x.symbol)">{{ x.symbol }}</a></td>
+            <td>{{ x.latestPrice | currency}}</td>
+        </tr>
+    </table>
+</div>
+<div *ngIf="showMoreDetail">
+    <label>Company Name: {{selectedStockInfo.companyName}} </label> <br/>
+    <label>Symbol: {{selectedStockInfo.symbol}}</label> <br/>
+    <label>Latest Price: {{selectedStockInfo.latestPrice}}</label> <br/>
+    <label>Primary Exchange: {{selectedStockInfo.primaryExchange}}</label> <br/>
+    <label>Sector: {{selectedStockInfo.sector}}</label>
+</div>
