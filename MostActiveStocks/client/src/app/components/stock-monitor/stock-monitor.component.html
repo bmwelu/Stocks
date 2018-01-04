@@ -9,7 +9,7 @@
     <input type="text" placeholder="Enter a company name filter" [(ngModel)]="companyFilter" (click)="showMoreDetail=false" />
 </div>
 <div class="container">
-    <table class="table-striped" id="stock-table">
+    <table id="stock-table">
         <tr>
             <td> Company Name </td>
             <td> Symbol </td>
@@ -22,7 +22,7 @@
         </tr>
     </table>
 </div>
-<div *ngIf="showMoreDetail">
+<div *ngIf="showMoreDetail" id="detail-section">
     <label>Company Name: {{selectedStockInfo.companyName}} </label> <br/>
     <label>Symbol: {{selectedStockInfo.symbol}}</label> <br/>
     <label>Latest Price: {{selectedStockInfo.latestPrice}}</label> <br/>
