@@ -1,5 +1,4 @@
 var express = require('express');
-var index = require('./routes/index');
 var stocks = require('./routes/stocks');
 var app = express();
 
@@ -12,7 +11,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', index);
+app.use('/', stocks);
 app.use('/stocks', stocks);
 
 app.listen(port, function(){
