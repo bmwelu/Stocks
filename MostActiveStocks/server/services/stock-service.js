@@ -1,4 +1,4 @@
-var request = require('request');
+const request = require('request');
 
 module.exports = {
     getLatestStocks : function (callback) {
@@ -15,7 +15,7 @@ module.exports = {
             var ungroomedData = JSON.parse(body);
             var groomedData = [];
       
-            for(var i = 0; i < ungroomedData.length; i++) {
+            for(let i = 0; i < ungroomedData.length; i++) {
                 var clone = {};
                 clone["symbol"] = ungroomedData[i]["symbol"];
                 clone["companyName"] = ungroomedData[i]["companyName"];
