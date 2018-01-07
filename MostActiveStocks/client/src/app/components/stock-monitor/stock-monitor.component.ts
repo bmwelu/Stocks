@@ -11,14 +11,16 @@ export class StockMonitorComponent implements OnInit {
   secondsRemaining:number;
   stocks:[Stock];
   companyFilter:string;
-  selectedStockInfo:[StockInfo];
+  selectedStockInfo:StockInfo;
   showMoreDetail:boolean;
+  monitoredStocks:[Stock];
 
   constructor(private clockService:ClockService, private stockMonitorService:StockMonitorService) { }
 
   ngOnInit() {
      this.clockService.getClock().subscribe(secondsRemaining => this.updateTime(secondsRemaining));
      this.showMoreDetail = false;
+     this.getMonitoredStocks();
   }
 
   private updateTime(seconds: number)
@@ -39,6 +41,11 @@ export class StockMonitorComponent implements OnInit {
   {
     this.stockMonitorService.getStock(ticker).subscribe(stockInfo => {this.selectedStockInfo = stockInfo, this.showMoreDetail = true});
     
+  }
+
+  public getMonitoredStocks()
+  {
+    this.stockMonitorService.getMonitoredStocks().subscribe(monitoredStocks => this.monitoredStocks = monitoredStocks);
   }
 }
 

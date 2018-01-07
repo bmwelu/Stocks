@@ -1,4 +1,6 @@
 const request = require('request');
+const mongojs = require('mongojs');
+const db = mongojs('mongodb://bmwelu:bmwelu1@ds245337.mlab.com:45337/bmwelu_stocks', ['stocks_watched']);
 
 module.exports = {
     getLatestStocks : function (callback) {
@@ -47,5 +49,14 @@ module.exports = {
             clone["sector"] = ungroomedData["sector"];
             callback(null,clone);
         })
+    },
+
+    getStocksMonitored : function (callback) {
+        db.stocks_watched.find(function(error, response){
+            if (error) {
+                return callback(error);
+            }
+            callback(null,response);
+        });
     }
 };
