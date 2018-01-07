@@ -19,4 +19,10 @@ export class StockMonitorService{
         .map(res => res.json())
         .catch(res => Observable.throw(res.json()))
     }
+
+    getMonitoredStocks(){
+        return this.http.get('http://localhost:8000/stocks/watchlist/')
+        .map(res => res.json())
+        .catch(res => Observable.throw(res.json()))
+    }
 }
