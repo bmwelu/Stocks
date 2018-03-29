@@ -9,10 +9,17 @@ Running the solution locally requires port 4200 for the client and port 8000 for
 
 ## TODO
 Unit tests for front and backend
+
 Accounts to save stocks, etc.
+
 Attach live news to each stocks
+
 Modules for currencies and sectors
+
 After hours moves
+
 Green/Red arrows indicating last update positive/negative
+
 Considerations for security, DOS attacks, etc.
+
 Show charts have point data on very top, ugly to read
