@@ -5,14 +5,13 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './chart.component.html'
 })
 export class ChartComponent implements OnInit {
-  
   // lineChart
   public lineChartData: Array<any> = [{data: [], }];
   public lineChartLabels: Array<any> = [];
-  public showChart: boolean = false;
-  public lineChartLegend: boolean = false;
-  public lineChartType: string = 'line';
-  public lineChartOptions: any = {
+  public showChart = false;
+  public lineChartLegend = false;
+  public lineChartType = 'line';
+  public lineChartOptions = {
     responsive: true,
     legend: {display: false},
     // scales:
@@ -23,12 +22,16 @@ export class ChartComponent implements OnInit {
     // }
     elements: { point: { radius: 0 } }
   };
-  public lineChartColors: Array<any> = [
+  public lineChartColors = [
     {
         backgroundColor: 'transparent',
         borderColor: 'rgb(66, 244, 69)'
     }
   ];
+
+  ngOnInit() {
+    this.showChart = false;
+  }
 
   // Assumes graph data comes in reverse chronological order
   public populateData(chartData: Array<number>, chartLabels: Array<any>) {
@@ -58,9 +61,5 @@ export class ChartComponent implements OnInit {
 
   public chartHovered(e: any): void {
     console.log(e);
-  }
-
-  ngOnInit() {
-    this.showChart = false;
   }
 }

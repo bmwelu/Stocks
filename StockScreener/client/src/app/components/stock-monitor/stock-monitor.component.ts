@@ -1,10 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { ClockService } from '../../services/clock.service';
 import { StockMonitorService } from '../../services/stock-monitor.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { StockComponentSharedService } from '../../services/stock-component-shared.service';
-// import { Subscription }   from 'rxjs/Subscription';
-
 
 @Component({
   selector: 'app-stock-monitor',
@@ -20,18 +18,12 @@ export class StockMonitorComponent implements OnInit {
   selectedSuggestedStocks: Stock[];
   emptySuggestions: boolean;
   showMoreDetailTicker: string;
-  // subscription: Subscription;
 
-  constructor(private clockService: ClockService,
+  constructor(
+    private clockService: ClockService,
     private stockMonitorService: StockMonitorService,
-    public cdRef: ChangeDetectorRef,
     private toastr: ToastsManager,
-    private stockComponentSharedService: StockComponentSharedService) {
-      // this.subscription = stockComponentSharedService.updateHideDetail$.subscribe(
-      //   hd => {
-      //     this.mission = mission;
-      // });
-    }
+    private stockComponentSharedService: StockComponentSharedService) { }
 
   ngOnInit() {
      this.emptySuggestions = true;
@@ -53,11 +45,13 @@ export class StockMonitorComponent implements OnInit {
   private updateStocks(stocks: Stock[]) {
     if (stocks.length > 0) {
       this.stockMonitorService.getStocks(stocks.map(s => s.symbol)).subscribe(returnedStocks => {
-        returnedStocks.forEach(returnedStock =>  {
+        returnedStocks.forEach((returnedStock: Stock) =>  {
             const stockToUpdate = stocks.find(function(st) {
               return st.symbol === returnedStock.symbol;
             });
-            stockToUpdate.latestPrice = returnedStock.latestPrice;
+            if (typeof stockToUpdate !== 'undefined') {
+              stockToUpdate.latestPrice = returnedStock.latestPrice;
+            }
         });
       });
     }
@@ -73,15 +67,12 @@ export class StockMonitorComponent implements OnInit {
         this.stocks.push(this.selectedSuggestedStocks[0]);
         this.updateStocks([this.selectedSuggestedStocks[0]]);
         localStorage.setItem('stockList', JSON.stringify(this.stocks));
-        this.selectedSuggestedStocks = [];
-        this.searchString = '';
         this.toastr.success('Stock was added to list below.', 'Success!');
       } else {
-        this.toastr.error(this.selectedSuggestedStocks[0].symbol + ': ' + this.selectedSuggestedStocks[0].companyName +
-        'is already in the list.', 'Error!');
-        this.selectedSuggestedStocks = [];
-        this.searchString = '';
+        this.toastr.error(
+          `${this.selectedSuggestedStocks[0].symbol}: ${this.selectedSuggestedStocks[0].companyName} is already in the list.`, 'Error!');
       }
+      this.cleanupSearch();
     } else {
       this.toastr.error('Please select a stock from the suggested list.', 'Error!');
     }
@@ -102,21 +93,15 @@ export class StockMonitorComponent implements OnInit {
     }
   }
 
-  // public getMonitoredStocks()
-  // {
-  //   this.stockMonitorService.getMonitoredStocks().subscribe(monitoredStocks => this.monitoredStocks = monitoredStocks);
-  // }
-
   public suggestedStockSelected() {
     this.searchString = this.selectedSuggestedStocks[0].symbol + ': ' + this.selectedSuggestedStocks[0].companyName;
     this.emptySuggestions = true;
-    this.cdRef.detectChanges();
   }
 
-  // ngOnDestroy() {
-  //   // prevent memory leak when component destroyed
-  //   this.subscription.unsubscribe();
-  // }
+  private cleanupSearch() {
+    this.selectedSuggestedStocks = [];
+    this.searchString = '';
+  }
 }
 
 interface Stock {

@@ -4,13 +4,9 @@ import {Observable} from 'rxjs';
 @Injectable()
 export class ClockService {
 
-  private clock: Observable<number>;
+  private clock: Observable<number> = Observable.interval(1000).map(tick => 30 - (tick % 30));
 
-  constructor() {
-    this.clock = Observable.interval(1000).map(tick => 30 - (tick % 30));
-  }
-
-  getClock(): Observable<number> {
+  public getClock(): Observable<number> {
     return this.clock;
   }
 }

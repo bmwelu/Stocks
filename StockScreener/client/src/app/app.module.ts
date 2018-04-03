@@ -16,11 +16,6 @@ import { ClockService } from './services/clock.service';
 import { StockMonitorService } from './services/stock-monitor.service';
 import { StockComponentSharedService } from './services/stock-component-shared.service';
 
-
-// Pipes
-import { CompanyNameFilterPipe } from './pipes/CompanyNameFilterPipe';
-import { CompanySortAlphabeticalPipe } from './pipes/CompanySortAlphabeticalPipe';
-
 // Customization for third party
 import { CustomToastOptions } from './custom-options';
 import {ToastOptions} from 'ng2-toastr';
@@ -33,8 +28,6 @@ import { ChartComponent } from './components/chart/chart.component';
   declarations: [
     AppComponent,
     StockMonitorComponent,
-    CompanyNameFilterPipe,
-    CompanySortAlphabeticalPipe,
     StockDetailComponent,
     ChartComponent
   ],

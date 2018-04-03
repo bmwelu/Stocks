@@ -11,20 +11,20 @@ import { Subscription } from 'rxjs/Subscription';
 })
 
 export class StockDetailComponent implements OnInit {
-  subscription: Subscription;
-  hideDetail: boolean;
-  ticker: string;
+  hideDetail = true;
+  ticker = '';
   chart: ChartComponent;
-  constructor(private stockComponentSharedService: StockComponentSharedService,
-              private stockMonitorService: StockMonitorService) {
-    this.chart = new ChartComponent();
-    stockComponentSharedService.ticker$.subscribe(
-      t => {
-        this.ticker = t;
-        this.generateChart(JSON.parse(localStorage.getItem(this.ticker + ':0:data')),
-          JSON.parse(localStorage.getItem(this.ticker + ':0:labels')));
-        this.hideDetail = false;
-      });
+  constructor(
+    private stockComponentSharedService: StockComponentSharedService,
+    private stockMonitorService: StockMonitorService) {
+      this.chart = new ChartComponent();
+      stockComponentSharedService.ticker$.subscribe(
+        t => {
+          this.ticker = t;
+          this.generateChart(JSON.parse(localStorage.getItem(`${this.ticker}:0:data`)  || '{}'),
+          JSON.parse(localStorage.getItem(`${this.ticker}:0:labels`)  || '{}'));
+          this.hideDetail = false;
+        });
    }
 
   ngOnInit() {
@@ -37,12 +37,12 @@ export class StockDetailComponent implements OnInit {
     this.stockComponentSharedService.clearTicker(this.ticker);
   }
 
-  private changeChartTimeSpan(interval) {
-    this.generateChart(JSON.parse(localStorage.getItem(this.ticker + ':' + interval + ':data')),
-    JSON.parse(localStorage.getItem(this.ticker + ':' + interval + ':labels'));
+  private changeChartTimeSpan(interval: number) {
+    this.generateChart(JSON.parse(localStorage.getItem(`${this.ticker}:${interval}:data`)  || '{}'),
+    JSON.parse(localStorage.getItem(`${this.ticker}:${interval}:labels`)  || '{}'));
   }
 
-  private generateChart(data, labels) {
+  private generateChart(data: number[], labels: string[]) {
     this.chart.populateData(data, labels);
   }
 }
