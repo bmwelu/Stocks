@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { Observable } from 'rxjs/Observable';
 import { IStock } from '../_shared/models/istock';
+import 'rxjs/add/observable/zip';
 
 @Injectable()
 export class StockComponentSharedService {

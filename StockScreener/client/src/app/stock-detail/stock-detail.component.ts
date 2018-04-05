@@ -3,6 +3,7 @@ import { StockComponentSharedService } from '../_shared/stock-component-shared.s
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ChartComponent } from '../_shared/chart/chart.component';
 import { SubscriberEntity } from '../_core/subscriber-entity';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-stock-detail',

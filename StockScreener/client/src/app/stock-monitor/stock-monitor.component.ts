@@ -5,6 +5,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
 import { IStock } from '../_shared/models/istock';
 import { SubscriberEntity } from '../_core/subscriber-entity';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-stock-monitor',
