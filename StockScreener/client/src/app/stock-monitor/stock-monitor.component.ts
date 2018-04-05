@@ -12,14 +12,12 @@ import 'rxjs/add/operator/takeUntil';
   templateUrl: './stock-monitor.component.html'
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
-  secondsRemaining: number;
-  stocks: Stock[];
-  searchString: string;
-  selectedStockInfo: Stock;
-  suggestedStocks: Stock[];
-  selectedSuggestedStocks: Stock[];
-  emptySuggestions = true;
-  showMoreDetailTicker: string;
+  private secondsRemaining = 0;
+  private stocks: Stock[] = [];
+  private searchString = '';
+  private suggestedStocks: Stock[] = [];
+  private selectedSuggestedStocks: Stock[] = [];
+  private emptySuggestions = true;
 
   constructor(
     private clockService: ClockService,
@@ -29,7 +27,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
         super();
     }
 
-  ngOnInit() {
+  public ngOnInit(): void {
      this.emptySuggestions = true;
      this.suggestedStocks = [];
      this.selectedSuggestedStocks = [];
@@ -39,14 +37,14 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
      this.stocks = this.stockComponentSharedService.getCachedStockList();
   }
 
-  private updateTime(seconds: number) {
+  private updateTime(seconds: number): void {
     this.secondsRemaining = seconds;
     if (this.secondsRemaining % 30 === 0) {
       this.updateStocks(this.stocks);
     }
   }
 
-  private updateStocks(stocks: Stock[]) {
+  private updateStocks(stocks: Stock[]): void {
     if (stocks.length <= 0) {
         return;
       }
@@ -62,11 +60,11 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
       });
   }
 
-  public getTickerInfo(ticker: string) {
+  public getTickerInfo(ticker: string): void {
     this.stockComponentSharedService.updateTicker(ticker);
   }
 
-  public addStock() {
+  public addStock(): void {
     // This needs to be refactored.  selectedSuggestedStocks is populated from a multiselect that will only always have
     // 1 or 0 selected; never multi
     if (this.selectedSuggestedStocks.length > 0) {
@@ -85,12 +83,12 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
   }
 
-  public deleteStock(ticker: string) {
+  public deleteStock(ticker: string): void {
     this.stocks = this.stocks.filter(stock => stock.symbol !== ticker);
     this.stockComponentSharedService.setCachedStockList(this.stocks);
   }
 
-  public getSuggestedStocks(searchString: string) {
+  public getSuggestedStocks(searchString: string): void {
     this.suggestedStocks = [];
     this.emptySuggestions = (this.suggestedStocks.length === 0);
     if (typeof searchString !== 'undefined' && searchString) {
@@ -101,12 +99,12 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
   }
 
-  public suggestedStockSelected() {
+  public suggestedStockSelected(): void {
     this.searchString = this.selectedSuggestedStocks[0].symbol + ': ' + this.selectedSuggestedStocks[0].companyName;
     this.emptySuggestions = true;
   }
 
-  private cleanupSearch() {
+  private cleanupSearch(): void {
     this.selectedSuggestedStocks = [];
     this.searchString = '';
   }

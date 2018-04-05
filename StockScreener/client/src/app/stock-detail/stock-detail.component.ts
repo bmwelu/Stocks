@@ -11,9 +11,9 @@ import 'rxjs/add/operator/takeUntil';
 })
 
 export class StockDetailComponent extends SubscriberEntity implements OnInit  {
-  hideDetail = true;
-  ticker = '';
-  chart: ChartComponent;
+  private hideDetail = true;
+  private ticker = '';
+  private chart: ChartComponent;
   constructor(
     private stockComponentSharedService: StockComponentSharedService,
     private stockMonitorService: StockMonitorService) {
@@ -30,22 +30,22 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
         });
    }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.hideDetail = true;
   }
 
-  private hideStockDetails() {
+  private hideStockDetails(): void {
     this.chart.populateData([], []);
     this.hideDetail = true;
     this.stockComponentSharedService.clearTicker(this.ticker);
   }
 
-  private changeChartTimeSpan(interval: number) {
+  private changeChartTimeSpan(interval: number): void {
     this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, interval),
         this.stockComponentSharedService.getCachedStockLabels(this.ticker, interval));
   }
 
-  private generateChart(data: number[], labels: string[]) {
+  private generateChart(data: number[], labels: string[]): void {
     this.chart.populateData(data, labels);
   }
 }

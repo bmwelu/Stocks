@@ -14,10 +14,10 @@ export class StockComponentSharedService {
   private ticker = new Subject<string>();
 
   // Observable string streams
-  tickerStream = this.ticker.asObservable();
+  public tickerStream = this.ticker.asObservable();
 
   // Service message commands
-  public updateTicker(ticker: string) {
+  public updateTicker(ticker: string): void {
     // Cache all graph data
     Observable.zip(this.stockMonitorService.getStockTimeSeriesData(ticker, 0),
                    this.stockMonitorService.getStockTimeSeriesData(ticker, 1),
@@ -37,19 +37,19 @@ export class StockComponentSharedService {
     return JSON.parse(data);
   }
 
-  public setCachedStockList(stocks: Stock[]) {
+  public setCachedStockList(stocks: Stock[]): void {
     localStorage.setItem('stockList', JSON.stringify(stocks));
   }
 
-  public getCachedStockData(ticker: string, interval: number) {
+  public getCachedStockData(ticker: string, interval: number): any {
     return JSON.parse(localStorage.getItem(`${ticker}:${interval}:data`)  || '{}');
   }
 
-  public getCachedStockLabels(ticker: string, interval: number) {
+  public getCachedStockLabels(ticker: string, interval: number): any {
     return JSON.parse(localStorage.getItem(`${ticker}:${interval}:labels`)  || '{}');
   }
 
-  private cacheChartIntervalData(chartData: any, ticker: string, interval: number) {
+  private cacheChartIntervalData(chartData: any, ticker: string, interval: number): void {
       const labels = [];
       const data = [];
       for (let i = chartData.length - 1; i > -1; i--) {
@@ -60,7 +60,7 @@ export class StockComponentSharedService {
       localStorage.setItem(`${ticker}:${interval}:labels`, JSON.stringify(labels));
   }
 
-  clearTicker(ticker: string) {
+  public clearTicker(ticker: string): void {
     // Remove all cached graph data
     localStorage.removeItem(`${ticker}:0:data`);
     localStorage.removeItem(`${ticker}:0:labels`);

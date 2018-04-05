@@ -29,12 +29,12 @@ export class ChartComponent implements OnInit {
     }
   ];
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.showChart = false;
   }
 
   // Assumes graph data comes in reverse chronological order
-  public populateData(chartData: Array<number>, chartLabels: Array<any>) {
+  public populateData(chartData: Array<number>, chartLabels: Array<any>): void {
     if (chartData.length === 0 || chartLabels.length === 0) {
       this.lineChartData = [{data: [], }];
       this.lineChartLabels = [];
@@ -47,7 +47,7 @@ export class ChartComponent implements OnInit {
       this.lineChartColors = [
         {
           backgroundColor: 'transparent',
-          borderColor: chartData[chartData.length - 1] - chartData[0] > 0 ? 'rgb(66, 244, 69)' : 'rgb(244, 65, 65)',
+          borderColor: chartData[chartData.length - 1] - chartData[0] > 0 ? 'rgb(66, 244, 69)' : 'rgb(244, 65, 65)'
         }
       ];
       this.showChart = true;

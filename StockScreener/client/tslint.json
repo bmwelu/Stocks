@@ -32,7 +32,7 @@
       true,
       140
     ],
-    "member-access": false,
+    "member-access": true,
     "member-ordering": [
       true,
       {
@@ -151,6 +151,7 @@
         },
         "esSpecCompliant": true
       }
-    ]
+    ],
+    "typedef": [true, "call-signature"]
   }
 }
