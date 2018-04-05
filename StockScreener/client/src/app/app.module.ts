@@ -3,8 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { StockMonitorComponent } from './components/stock-monitor/stock-monitor.component';
-import { StockDetailComponent } from './components/stock-detail/stock-detail.component';
+import { HttpClientModule } from '@angular/common/http';
+import { StockMonitorComponent } from './stock-monitor/stock-monitor.component';
+import { StockDetailComponent } from './stock-detail/stock-detail.component';
 import { ChartsModule } from 'ng2-charts';
 
 // Third party
@@ -12,16 +13,16 @@ import { PopoverModule } from 'ngx-popover';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 // Services
-import { ClockService } from './services/clock.service';
-import { StockMonitorService } from './services/stock-monitor.service';
-import { StockComponentSharedService } from './services/stock-component-shared.service';
+import { ClockService } from './_shared/clock.service';
+import { StockMonitorService } from './_api/services/stock-monitor.service';
+import { StockComponentSharedService } from './_shared/stock-component-shared.service';
 
 // Customization for third party
-import { CustomToastOptions } from './custom-options';
-import {ToastOptions} from 'ng2-toastr';
+import { CustomToastOptions } from './_core/custom-toast-message-options';
+import { ToastOptions } from 'ng2-toastr';
 
 import { AppComponent } from './app.component';
-import { ChartComponent } from './components/chart/chart.component';
+import { ChartComponent } from './_shared/chart/chart.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { ChartComponent } from './components/chart/chart.component';
     PopoverModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     ToastModule.forRoot(),
     ChartsModule

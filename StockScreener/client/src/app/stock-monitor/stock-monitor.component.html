@@ -4,7 +4,9 @@
             <h3>Stock Screener              
                 <a class="glyphicon glyphicon-question-sign" 
                     id="info" title="Stock Hours" 
-                    popover="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  Data will not refresh outside of these hours. Only stocks traded on NYSE and NASDAQ can currently be added."
+                    popover="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  
+                    Data will not refresh outside of these hours. Only stocks traded on NYSE and NASDAQ 
+                    can currently be added."
                     [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
                 </a>
             </h3>
@@ -14,7 +16,8 @@
                 <a (click)="addStock()"><img src="/assets/plus.ico" height="20" width="20"/></a>
             </div>
             <div style="min-height:115px">
-                <select multiple [(ngModel)]="selectedSuggestedStocks" class="suggested-stocks" size="{{suggestedStocks.length}}" [hidden]="emptySuggestions" (ngModelChange)="suggestedStockSelected($event)">
+                <select multiple [(ngModel)]="selectedSuggestedStocks" class="suggested-stocks" 
+                    size="suggestedStocks.length" [hidden]="emptySuggestions" (ngModelChange)="suggestedStockSelected($event)">
                     <option *ngFor="let stock of suggestedStocks" [ngValue]="stock">{{stock.symbol}} : {{stock.companyName}}</option>
                 </select>
             </div>
@@ -38,31 +41,5 @@
             </table>
         </div>
         <app-stock-detail></app-stock-detail>
-        <!-- <div class="watched">
-            <div>
-                <h2>Watch List</h2>
-                <table class="stock-table">
-                    <tr>
-                        <td> Company Name </td>
-                        <td> Symbol </td>
-                    </tr>
-                    <tr *ngFor="let x of monitoredStocks | sort:monitoredStocks">
-                        <td>{{ x.companyName }}</td>
-                        <td><a (click)="getTickerInfo(x.symbol)">{{ x.symbol }}</a></td>
-                    </tr>
-                </table>
-            </div>
-            <div *ngIf="showMoreDetail" id="detail-section">
-                <label>Company Name: {{selectedStockInfo.companyName}} </label>
-                <br/>
-                <label>Symbol: {{selectedStockInfo.symbol}}</label>
-                <br/>
-                <label>Latest Price: {{selectedStockInfo.latestPrice}}</label>
-                <br/>
-                <label>Primary Exchange: {{selectedStockInfo.primaryExchange}}</label>
-                <br/>
-                <label>Sector: {{selectedStockInfo.sector}}</label>
-            </div>
-        </div> -->
     </div>
 </div>

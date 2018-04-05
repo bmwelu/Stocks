@@ -1,21 +1,22 @@
 import { Component, OnInit, Output, EventEmitter} from '@angular/core';
-import { ClockService } from '../../services/clock.service';
-import { StockMonitorService } from '../../services/stock-monitor.service';
+import { ClockService } from '../_shared/clock.service';
+import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { StockComponentSharedService } from '../../services/stock-component-shared.service';
+import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
+import { IStock } from '../_shared/models/istock';
+import { SubscriberEntity } from '../_core/subscriber-entity';
 
 @Component({
   selector: 'app-stock-monitor',
-  templateUrl: './stock-monitor.component.html',
-  styleUrls: ['./stock-monitor.component.css'],
+  templateUrl: './stock-monitor.component.html'
 })
-export class StockMonitorComponent implements OnInit {
+export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   secondsRemaining: number;
-  stocks: Stock[];
+  stocks: IStock[];
   searchString: string;
-  selectedStockInfo: StockInfo;
-  suggestedStocks: Stock[];
-  selectedSuggestedStocks: Stock[];
+  selectedStockInfo: IStock;
+  suggestedStocks: IStock[];
+  selectedSuggestedStocks: IStock[];
   emptySuggestions: boolean;
   showMoreDetailTicker: string;
 
@@ -23,16 +24,18 @@ export class StockMonitorComponent implements OnInit {
     private clockService: ClockService,
     private stockMonitorService: StockMonitorService,
     private toastr: ToastsManager,
-    private stockComponentSharedService: StockComponentSharedService) { }
+    private stockComponentSharedService: StockComponentSharedService) {
+        super();
+    }
 
   ngOnInit() {
      this.emptySuggestions = true;
      this.suggestedStocks = [];
      this.selectedSuggestedStocks = [];
-     this.clockService.getClock().subscribe(secondsRemaining => this.updateTime(secondsRemaining));
-     let data = localStorage.getItem('stockList');
-     data = (data === 'undefined' || data === null) ? '[]' : data;
-     this.stocks = JSON.parse(data);
+     this.clockService.getClock()
+         .takeUntil(this.destroyed)
+         .subscribe((secondsRemaining) => this.updateTime(secondsRemaining));
+     this.stocks = this.stockComponentSharedService.getCachedStockList();
   }
 
   private updateTime(seconds: number) {
@@ -42,19 +45,20 @@ export class StockMonitorComponent implements OnInit {
     }
   }
 
-  private updateStocks(stocks: Stock[]) {
-    if (stocks.length > 0) {
-      this.stockMonitorService.getStocks(stocks.map(s => s.symbol)).subscribe(returnedStocks => {
-        returnedStocks.forEach((returnedStock: Stock) =>  {
-            const stockToUpdate = stocks.find(function(st) {
-              return st.symbol === returnedStock.symbol;
-            });
-            if (typeof stockToUpdate !== 'undefined') {
-              stockToUpdate.latestPrice = returnedStock.latestPrice;
-            }
-        });
+  private updateStocks(stocks: IStock[]) {
+    if (stocks.length <= 0) {
+        return;
+      }
+      const stockSymbols = stocks.map((s) => s.symbol);
+      const request = this.stockMonitorService.getStocks(stockSymbols);
+      request.subscribe((returnedStocks) => {
+        for (const stock of returnedStocks) {
+          const stockToUpdate = stocks.find((st) => st.symbol === stock.symbol);
+          if (stockToUpdate !== undefined) {
+            stockToUpdate.latestPrice = stock.latestPrice;
+          }
+        }
       });
-    }
   }
 
   public getTickerInfo(ticker: string) {
@@ -62,11 +66,13 @@ export class StockMonitorComponent implements OnInit {
   }
 
   public addStock() {
+    // This needs to be refactored.  selectedSuggestedStocks is populated from a multiselect that will only always have
+    // 1 or 0 selected; never multi
     if (this.selectedSuggestedStocks.length > 0) {
-      if (this.stocks.filter(stock => stock.symbol === this.selectedSuggestedStocks[0].symbol).length === 0) {
+      if (this.stocks.filter((stock) => stock.symbol === this.selectedSuggestedStocks[0].symbol).length === 0) {
         this.stocks.push(this.selectedSuggestedStocks[0]);
         this.updateStocks([this.selectedSuggestedStocks[0]]);
-        localStorage.setItem('stockList', JSON.stringify(this.stocks));
+        this.stockComponentSharedService.setCachedStockList(this.stocks);
         this.toastr.success('Stock was added to list below.', 'Success!');
       } else {
         this.toastr.error(
@@ -86,7 +92,7 @@ export class StockMonitorComponent implements OnInit {
     this.suggestedStocks = [];
     this.emptySuggestions = (this.suggestedStocks.length === 0);
     if (typeof searchString !== 'undefined' && searchString) {
-      this.stockMonitorService.getSuggestedStocks(searchString).subscribe(suggestedStocks => {
+      this.stockMonitorService.getSuggestedStocks(searchString).subscribe((suggestedStocks) => {
           this.suggestedStocks = suggestedStocks;
           this.emptySuggestions = (this.suggestedStocks.length === 0);
       });
@@ -103,17 +109,3 @@ export class StockMonitorComponent implements OnInit {
     this.searchString = '';
   }
 }
-
-interface Stock {
-   companyName: string;
-   symbol: string;
-   latestPrice: string;
- }
-
- interface StockInfo {
-    companyName: string;
-    symbol: string;
-    latestPrice: string;
-    primaryExchange: string;
-    sector: string;
- }
