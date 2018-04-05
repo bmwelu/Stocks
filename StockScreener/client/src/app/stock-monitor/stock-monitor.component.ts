@@ -3,7 +3,7 @@ import { ClockService } from '../_shared/clock.service';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
-import { IStock } from '../_shared/models/istock';
+import { Stock } from '../_shared/models/stock';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import 'rxjs/add/operator/takeUntil';
 
@@ -13,11 +13,11 @@ import 'rxjs/add/operator/takeUntil';
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   secondsRemaining: number;
-  stocks: IStock[];
+  stocks: Stock[];
   searchString: string;
-  selectedStockInfo: IStock;
-  suggestedStocks: IStock[];
-  selectedSuggestedStocks: IStock[];
+  selectedStockInfo: Stock;
+  suggestedStocks: Stock[];
+  selectedSuggestedStocks: Stock[];
   emptySuggestions = true;
   showMoreDetailTicker: string;
 
@@ -46,7 +46,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
   }
 
-  private updateStocks(stocks: IStock[]) {
+  private updateStocks(stocks: Stock[]) {
     if (stocks.length <= 0) {
         return;
       }
@@ -87,6 +87,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
 
   public deleteStock(ticker: string) {
     this.stocks = this.stocks.filter(stock => stock.symbol !== ticker);
+    this.stockComponentSharedService.setCachedStockList(this.stocks);
   }
 
   public getSuggestedStocks(searchString: string) {

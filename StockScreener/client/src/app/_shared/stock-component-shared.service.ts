@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { Observable } from 'rxjs/Observable';
-import { IStock } from '../_shared/models/istock';
+import { Stock } from '../_shared/models/stock';
 import 'rxjs/add/observable/zip';
 
 @Injectable()
@@ -31,13 +31,13 @@ export class StockComponentSharedService {
                 this.ticker.next(ticker); });
   }
 
-  public getCachedStockList(): IStock[] {
+  public getCachedStockList(): Stock[] {
     let data = localStorage.getItem('stockList');
     data = (data === 'undefined' || data === null) ? '[]' : data;
     return JSON.parse(data);
   }
 
-  public setCachedStockList(stocks: IStock[]) {
+  public setCachedStockList(stocks: Stock[]) {
     localStorage.setItem('stockList', JSON.stringify(stocks));
   }
 

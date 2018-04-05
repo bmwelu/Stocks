@@ -1,4 +1,4 @@
-export interface IStock {
+export interface Stock {
     companyName: string;
     symbol: string;
     latestPrice: string;
