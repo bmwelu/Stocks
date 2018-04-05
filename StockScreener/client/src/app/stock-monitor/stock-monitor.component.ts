@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClockService } from '../_shared/clock.service';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -17,7 +17,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   selectedStockInfo: IStock;
   suggestedStocks: IStock[];
   selectedSuggestedStocks: IStock[];
-  emptySuggestions: boolean;
+  emptySuggestions = true;
   showMoreDetailTicker: string;
 
   constructor(

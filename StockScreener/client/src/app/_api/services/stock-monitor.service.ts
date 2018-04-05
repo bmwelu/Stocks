@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { environment } from '../../../environments/environment';
-import { IStock } from '../_shared/models/istock';
+import { IStock } from '../../_shared/models/istock';
 import 'rxjs/add/operator/map';
 
 @Injectable()
