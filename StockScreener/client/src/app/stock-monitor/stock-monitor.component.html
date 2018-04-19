@@ -17,7 +17,7 @@
             </div>
             <div style="min-height:115px">
                 <select multiple [(ngModel)]="selectedSuggestedStocks" class="suggested-stocks" 
-                    size="suggestedStocks.length" [hidden]="emptySuggestions" (ngModelChange)="suggestedStockSelected($event)">
+                    size="suggestedStocks.length" [hidden]="emptySuggestions" (ngModelChange)="suggestedStockSelected()">
                     <option *ngFor="let stock of suggestedStocks" [ngValue]="stock">{{stock.symbol}} : {{stock.companyName}}</option>
                 </select>
             </div>

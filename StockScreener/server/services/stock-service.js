@@ -33,15 +33,17 @@ module.exports = {
         }
         const timeSeriesFactory = new TimeSeriesFactory();
         const timeSeries = timeSeriesFactory.createTimeSeries(interval);
+        console.log(timeSeries.requestURL);
         request(timeSeries.requestURL + ticker +'&apikey=' + 'YCZKYIG7S23CREP0', function(error, response, body) {
             //Check for error
-            if (error) {
+            if (error) {timeSeries.requestURL
                 return callback(error);
             }
             //Check for success status code
             if (response.statusCode !== 200) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
+
             //groom data
             callback(null,timeSeries.parseBody(body));
         });

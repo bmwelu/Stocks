@@ -2,7 +2,7 @@ var express = require('express');
 var stocks = require('./routes/stocks');
 var app = express();
 
-var port = 8000;
+var port = process.env.PORT || 80;
 
 // Add headers
 app.use(function (req, res, next) {

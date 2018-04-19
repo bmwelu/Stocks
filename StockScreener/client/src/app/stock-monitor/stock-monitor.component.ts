@@ -13,11 +13,11 @@ import 'rxjs/add/operator/takeUntil';
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   private secondsRemaining = 0;
-  private stocks: Stock[] = [];
-  private searchString = '';
-  private suggestedStocks: Stock[] = [];
-  private selectedSuggestedStocks: Stock[] = [];
-  private emptySuggestions = true;
+  public stocks: Stock[] = [];
+  public searchString = '';
+  public suggestedStocks: Stock[] = [];
+  public selectedSuggestedStocks: Stock[] = [];
+  public emptySuggestions = true;
 
   constructor(
     private clockService: ClockService,
