@@ -149,13 +149,31 @@ body{
 .stock-detail {
 	background-color: white;
 	position: absolute;
-	height: 600px;
-	width: 745px;
+	//height: 575px;
+	//width: 745px;
 	padding: 2px;
 	margin: 0 auto 0px;
 	border-radius: @border-radius;
 	border: solid #000;
-	border-width: 2px;
+    border-width: 2px;
+    font-family: @font-family;
+    
+    .stock-detail-info {
+        display: inline-block;
+        div {
+            float: left;
+            table {
+                margin-right: 15px;
+                margin-left: 10px;
+                tr {
+                    td {
+                        padding-right: 15px;
+                        text-align: left;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .time-series-button {

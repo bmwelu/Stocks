@@ -1,7 +1,12 @@
 const request = require('request');
-const mongojs = require('mongojs');
-const db = mongojs('mongodb://bmwelu:bmwelu1@ds245337.mlab.com:45337/bmwelu_stocks', ['stocks_watched']);
+//const mongojs = require('mongojs');
+//const db = mongojs('mongodb://bmwelu:bmwelu1@ds245337.mlab.com:45337/bmwelu_stocks', ['stocks_watched']);
 const TimeSeriesFactory = require('../factories/time-series-factory');
+const StockDetail = require('../models/stock-detail');
+const SuccessStatusCode = 200;
+const IntradayInterval = 0;
+const MontlyInterval = 3;
+const SuggestStockReturnAmount = 5;
 
 module.exports = {
     updateStockPrices : function (tickers, callback) {
@@ -11,14 +16,14 @@ module.exports = {
                 return callback(error);
             }
             //Check for success status code
-            if (response.statusCode !== 200) {
+            if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
             //groom data
             var ungroomedData = JSON.parse(body)['Stock Quotes'];
             var groomedData = [];
             for(let i = 0; i < ungroomedData.length; i++) {
-                var clone = {};
+                const clone = {};
                 clone["symbol"] = ungroomedData[i]["1. symbol"];
                 clone["latestPrice"] = ungroomedData[i]["2. price"];
                 groomedData.push(clone);
@@ -28,19 +33,18 @@ module.exports = {
     },
 
     getStockTimeSeriesData: function (ticker, interval, callback) {
-        if (parseInt(interval) < 0 || parseInt(interval) > 3) {
-            return callback(new Error('Invalid interval. Must be 0 through 3'));
+        if (parseInt(interval) < IntradayInterval || parseInt(interval) > MontlyInterval) {
+            return callback(new Error('Invalid interval. Must be 0(IntradayInterval) through 3(MontlyInterval)'));
         }
         const timeSeriesFactory = new TimeSeriesFactory();
         const timeSeries = timeSeriesFactory.createTimeSeries(interval);
-        console.log(timeSeries.requestURL);
         request(timeSeries.requestURL + ticker +'&apikey=' + 'YCZKYIG7S23CREP0', function(error, response, body) {
             //Check for error
             if (error) {timeSeries.requestURL
                 return callback(error);
             }
             //Check for success status code
-            if (response.statusCode !== 200) {
+            if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
 
@@ -49,62 +53,28 @@ module.exports = {
         });
     },
 
-    // getLatestStocks : function (callback) {
-    //     request('https://api.iextrading.com/1.0/stock/market/list/mostactive', function(error, response, body) {
-    //         //Check for error
-    //         if (error) {
-    //             return callback(error);
-    //         }
-    //         //Check for success status code
-    //         if (response.statusCode !== 200) {
-    //             return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
-    //         }
-    //         //groom data
-    //         var ungroomedData = JSON.parse(body);
-    //         var groomedData = [];
-      
-    //         for(let i = 0; i < ungroomedData.length; i++) {
-    //             var clone = {};
-    //             clone["symbol"] = ungroomedData[i]["symbol"];
-    //             clone["companyName"] = ungroomedData[i]["companyName"];
-    //             clone["latestPrice"] = ungroomedData[i]["latestPrice"];
-    //             groomedData.push(clone);
-    //         }
-    //         callback(null,groomedData);
-    //     })
-    // },
+    getStockDetail : function (ticker,callback) {
+        request('https://api.iextrading.com/1.0/stock/' + ticker + '/quote', function(error, response, body) {
+            //Check for error
+            if (error) {
+                return callback(error);
+            }
+            //Check for success status code
+            if (response.statusCode !== SuccessStatusCode) {
+                return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
+            }
+            //groom data
+            var ungroomedData = JSON.parse(body);
 
-    // getStockDetail : function (ticker,callback) {
-    //     request('https://api.iextrading.com/1.0/stock/' + ticker + '/quote', function(error, response, body) {
-    //         //Check for error
-    //         if (error) {
-    //             return callback(error);
-    //         }
-    //         //Check for success status code
-    //         if (response.statusCode !== 200) {
-    //             return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
-    //         }
-    //         //groom data
-    //         var ungroomedData = JSON.parse(body);
-
-    //         var clone = {};
-    //         clone["symbol"] = ungroomedData["symbol"];
-    //         clone["companyName"] = ungroomedData["companyName"];
-    //         clone["latestPrice"] = ungroomedData["latestPrice"];
-    //         clone["primaryExchange"] = ungroomedData["primaryExchange"];
-    //         clone["sector"] = ungroomedData["sector"];
-    //         callback(null,clone);
-    //     })
-    // },
-
-    // getStocksMonitored : function (callback) {
-    //     db.stocks_watched.find(function(error, response){
-    //         if (error) {
-    //             return callback(error);
-    //         }
-    //         callback(null,response);
-    //     });
-    // },
+            const stockDetail = new StockDetail(ungroomedData["symbol"],
+                                                ungroomedData["companyName"],
+                                                ungroomedData["primaryExchange"],
+                                                ungroomedData["sector"],
+                                                ungroomedData["week52High"],
+                                                ungroomedData["week52Low"])
+            callback(null,stockDetail);
+        })
+    },
 
     getSuggestedStocks : function (searchString, callback) {
         request('http://search.xignite.com/Search/Suggest?parameter=XigniteFinancials.GetCompanyBalanceSheet.Identifier&term=' + searchString + '&tags=XNYS,XNAS', function(error, response, body) {
@@ -113,14 +83,14 @@ module.exports = {
                 return callback(error);              
             }
             //Check for success status code
-            if (response.statusCode !== 200) {
+            if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));           
             }
 
             //groom data
             var ungroomedData = JSON.parse(body)['Results'];
             var groomedData = [];    
-            for(let i = 0; i < ungroomedData.length && i < 5; i++) {
+            for(let i = 0; i < ungroomedData.length && i < SuggestStockReturnAmount; i++) {
                 var clone = {};
                 clone["symbol"] = ungroomedData[i]["Value"];
                 clone["companyName"] = ungroomedData[i]["Text"];

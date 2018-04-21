@@ -71,4 +71,8 @@ export class StockComponentSharedService {
     localStorage.removeItem(`${ticker}:3:data`);
     localStorage.removeItem(`${ticker}:3:labels`);
   }
+
+  public getStockDetail(ticker: string): Observable<Stock> {
+    return this.stockMonitorService.getStockDetail(ticker);
+  }
 }

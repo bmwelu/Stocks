@@ -3,6 +3,7 @@ import { StockComponentSharedService } from '../_shared/stock-component-shared.s
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ChartComponent } from '../_shared/chart/chart.component';
 import { SubscriberEntity } from '../_core/subscriber-entity';
+import { Stock } from '../_shared/models/stock';
 import 'rxjs/add/operator/takeUntil';
 
 @Component({
@@ -14,6 +15,7 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
   public hideDetail = true;
   public ticker = '';
   public chart: ChartComponent;
+  public stockDetail: Stock | undefined;
   constructor(
     private stockComponentSharedService: StockComponentSharedService,
     private stockMonitorService: StockMonitorService) {
@@ -24,6 +26,7 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
         .subscribe(
           (ticker) => {
             this.ticker = ticker;
+            this.generateStockDetail(ticker);
             this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
               this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0));
             this.hideDetail = false;
@@ -47,5 +50,10 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
 
   public generateChart(data: number[], labels: string[]): void {
     this.chart.populateData(data, labels);
+  }
+
+  private generateStockDetail(ticker: string): void {
+      this.stockComponentSharedService.getStockDetail(ticker).subscribe(
+          (stockDetail) => this.stockDetail = stockDetail);
   }
 }

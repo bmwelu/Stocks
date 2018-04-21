@@ -12,8 +12,8 @@ export class StockMonitorService {
         return this.httpClient.get<Stock[]>(`${environment.apiURL}stocks/${stocks}`);
     }
 
-    public getStock(ticker: string): Observable<Stock> {
-        return this.httpClient.get<Stock>(`${environment.apiURL}stocks/${ticker}`);
+    public getStockDetail(ticker: string): Observable<Stock> {
+        return this.httpClient.get<Stock>(`${environment.apiURL}stocks/${ticker}/detail`);
     }
 
     public getStockTimeSeriesData(ticker: string, interval: number): Observable<any> {

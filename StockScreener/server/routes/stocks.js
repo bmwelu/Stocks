@@ -11,33 +11,24 @@ router.get('/stocks/:stocks', function(req, res){
   });
 });
 
-router.get('/stocks/watchlist', function(req, res){
-  stockservice.getStocksMonitored(function(error, results) {
-    if (error) {
-      res.status(500).send({ error: 'Failure retrieving watched stocks' })
-    }   
-    res.send(results);
+router.get('/stocks/:ticker/timeseries-data/:interval', function(req, res){
+    var ticker = req.params.ticker;
+    var interval = req.params.interval;
+    stockservice.getStockTimeSeriesData(ticker, interval, function(error, results) {
+      if (error) {
+        res.status(500).send({ error: 'Failure retrieving watched stocks' })
+      }   
+      res.send(results);
+    });
   });
-});
 
-router.get('/stocks/:ticker', function(req, res){
+router.get('/stocks/:ticker/detail', function(req, res){
   var ticker = req.params.ticker;
   stockservice.getStockDetail(ticker, function(error, results) {
     if (error) {
       res.status(500).send({ error: 'Failure retrieving ' + ticker + ' stock detail.' })
     }
     res.send(results);  
-  });
-});
-
-router.get('/stocks/:ticker/timeseries-data/:interval', function(req, res){
-  var ticker = req.params.ticker;
-  var interval = req.params.interval;
-  stockservice.getStockTimeSeriesData(ticker, interval, function(error, results) {
-    if (error) {
-      res.status(500).send({ error: 'Failure retrieving watched stocks' })
-    }   
-    res.send(results);
   });
 });
 
