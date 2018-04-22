@@ -32,7 +32,7 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
             this.ticker = ticker;
             this.generateStockDetail(ticker);
             // Determine which charts are available based on whether or not data is available
-            this.intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 0).length > 0;
+            // this.intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 0).length > 0;
             this.dailyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 1).length > 0;
             this.weeklyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 2).length > 0;
             this.monthlyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 3).length > 0;

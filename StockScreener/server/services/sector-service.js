@@ -1,9 +1,10 @@
 const request = require('request');
 const SuccessStatusCode = 200;
+const GlobalConstants = require('../models/global-constants');
 
 module.exports = {
     getSectorPerformance : function (callback) {
-        request('https://www.alphavantage.co/query?function=SECTOR&apikey=YCZKYIG7S23CREP0', function(error, response, body) {
+        request('https://www.alphavantage.co/query?function=SECTOR&apikey=' + GlobalConstants.alphavantageapikey, function(error, response, body) {
             //Check for error
             if (error) {
                 return callback(error);
