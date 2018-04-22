@@ -20,7 +20,7 @@ router.get('/stocks/:ticker/timeseries-data/:interval', function(req, res){
       }   
       res.send(results);
     });
-  });
+});
 
 router.get('/stocks/:ticker/detail', function(req, res){
   var ticker = req.params.ticker;
@@ -39,7 +39,6 @@ router.get('/stocks/suggested-stocks/:searchString', function(req, res){
       res.status(500).send({ error: 'Failure retrieving ' + searchString + ' suggested stocks.' })
     }
     res.send(results);  
-  });
 });
-
+});
 module.exports = router;

@@ -1,5 +1,4 @@
-<div class="stock-container">
-    <div class="stocks">
+<div class="widget-container">
         <div class="most-active">
             <h3>Stock Screener              
                 <a class="glyphicon glyphicon-question-sign" 
@@ -10,17 +9,17 @@
                     [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
                 </a>
             </h3>
-            <div class="bar">
+            <div class="search-bar">
                 <input type="text" placeholder="Enter a company name or ticker to add" [(ngModel)]="searchString" 
                 (ngModelChange)="getSuggestedStocks(searchString)" maxlength="35"/>
                 <a (click)="addStock()"><img src="/assets/plus.ico" height="20" width="20"/></a>
             </div>
-            <div style="min-height:115px">
+            <div style="height:115px">
                 <ol class="suggested-stocks" [hidden]="emptySuggestions">
                     <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
                 </ol>
             </div>
-            <table class="stock-table stock-table-rounded" [hidden]="stocks.length === 0">
+            <table class="table table-rounded" [hidden]="stocks.length === 0">
                 <thead>
                     <tr>
                         <th> Company Name </th>
@@ -40,5 +39,4 @@
             </table>
         </div>
         <app-stock-detail></app-stock-detail>
-    </div>
 </div>

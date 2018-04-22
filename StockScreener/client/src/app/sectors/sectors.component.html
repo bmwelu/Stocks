@@ -1,0 +1,20 @@
+<div class="widget-container" [hidden]="sectors.length === 0">
+    <div class="sectors">
+            <h3>Real-Time Sector Performance</h3>
+            <table class="table table-rounded sector-table">
+                <thead>
+                    <tr>
+                        <th> Sector Name </th>
+                        <th> Percent Change </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sector of sectors">
+                        <td>{{ sector.sectorName }}</td>
+                        <td [style.color]="sector.percentChange.charAt(0) === '-' ? 'red' : 'green'">{{ sector.percentChange }}</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+</div>
+

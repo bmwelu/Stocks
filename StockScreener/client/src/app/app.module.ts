@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { StockMonitorComponent } from './stock-monitor/stock-monitor.component';
 import { StockDetailComponent } from './stock-detail/stock-detail.component';
+import { SectorsComponent } from './sectors/sectors.component';
 import { ChartsModule } from 'ng2-charts';
 
 // Third party
@@ -15,6 +16,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 // Services
 import { ClockService } from './_shared/clock.service';
 import { StockMonitorService } from './_api/services/stock-monitor.service';
+import { SectorMonitorService } from './_api/services/sector-monitor.service';
 import { StockComponentSharedService } from './_shared/stock-component-shared.service';
 
 // Customization for third party
@@ -30,6 +32,7 @@ import { ChartComponent } from './_shared/chart/chart.component';
     AppComponent,
     StockMonitorComponent,
     StockDetailComponent,
+    SectorsComponent,
     ChartComponent
   ],
   imports: [
@@ -42,7 +45,8 @@ import { ChartComponent } from './_shared/chart/chart.component';
     ToastModule.forRoot(),
     ChartsModule
   ],
-  providers: [{provide: ToastOptions, useClass: CustomToastOptions}, ClockService, StockMonitorService, StockComponentSharedService],
+  providers: [{provide: ToastOptions, useClass: CustomToastOptions},
+     ClockService, StockMonitorService, StockComponentSharedService, SectorMonitorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

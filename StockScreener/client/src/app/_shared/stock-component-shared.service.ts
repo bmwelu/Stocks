@@ -70,8 +70,8 @@ export class StockComponentSharedService {
 
   public clearTicker(ticker: string): void {
     // Remove all cached graph data
-    localStorage.removeItem(`${ticker}:0:data`);
-    localStorage.removeItem(`${ticker}:0:labels`);
+    // localStorage.removeItem(`${ticker}:0:data`);
+    // localStorage.removeItem(`${ticker}:0:labels`);
     localStorage.removeItem(`${ticker}:1:data`);
     localStorage.removeItem(`${ticker}:1:labels`);
     localStorage.removeItem(`${ticker}:2:data`);
