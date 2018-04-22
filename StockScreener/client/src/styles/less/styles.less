@@ -69,7 +69,7 @@ body{
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 99;
+	z-index: -1;
     background-image: url(../../assets/wall_street.jpg);
 	background-size: cover;
     opacity : 0.4;
@@ -77,16 +77,17 @@ body{
 
 .widget-container {
         position: relative;
-        z-index:999;
         margin: 20px
 }
 .sectors {
     float: left;
     margin-right:50px;
+    z-index:1;
 }
     .most-active {
         margin-right:50px;
         float:left;
+        z-index: 2;
 	    .search-bar {
 		    background-color:black;
 		    width: 382px;
@@ -157,6 +158,7 @@ body{
 	border: solid #000;
     border-width: 2px;
     font-family: @font-family;
+    z-index:999;
     
     .stock-detail-info {
         display: inline-block;
