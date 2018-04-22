@@ -12,12 +12,13 @@ import 'rxjs/add/operator/takeUntil';
   templateUrl: './stock-monitor.component.html'
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
-  private secondsRemaining = 0;
   public stocks: Stock[] = [];
   public searchString = '';
   public suggestedStocks: Stock[] = [];
-  public selectedSuggestedStocks: Stock[] = [];
+  public selectedSuggestedStock: Stock | undefined;
   public emptySuggestions = true;
+  private updateStocksTimeInSeconds = 30;
+  private secondsRemainingUntilNextPriceUpdate = 0;
 
   constructor(
     private clockService: ClockService,
@@ -30,7 +31,6 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   public ngOnInit(): void {
      this.emptySuggestions = true;
      this.suggestedStocks = [];
-     this.selectedSuggestedStocks = [];
      this.clockService.getClock()
          .takeUntil(this.destroyed)
          .subscribe((secondsRemaining) => this.updateTime(secondsRemaining));
@@ -38,8 +38,8 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   }
 
   private updateTime(seconds: number): void {
-    this.secondsRemaining = seconds;
-    if (this.secondsRemaining % 30 === 0) {
+    this.secondsRemainingUntilNextPriceUpdate = seconds;
+    if (this.secondsRemainingUntilNextPriceUpdate % this.updateStocksTimeInSeconds === 0) {
       this.updateStocks(this.stocks);
     }
   }
@@ -65,17 +65,16 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   }
 
   public addStock(): void {
-    // This needs to be refactored.  selectedSuggestedStocks is populated from a multiselect that will only always have
-    // 1 or 0 selected; never multi
-    if (this.selectedSuggestedStocks.length > 0) {
-      if (this.stocks.filter((stock) => stock.symbol === this.selectedSuggestedStocks[0].symbol).length === 0) {
-        this.stocks.push(this.selectedSuggestedStocks[0]);
-        this.updateStocks([this.selectedSuggestedStocks[0]]);
+    if (this.selectedSuggestedStock) {
+      const symbolToAdd = (this.selectedSuggestedStock) ? this.selectedSuggestedStock.symbol : null;
+      if (this.stocks.filter((stock) => stock.symbol === symbolToAdd).length === 0) {
+        this.stocks.push(this.selectedSuggestedStock);
+        this.updateStocks([this.selectedSuggestedStock]);
         this.stockComponentSharedService.setCachedStockList(this.stocks);
         this.toastr.success('Stock was added to list below.', 'Success!');
       } else {
         this.toastr.error(
-          `${this.selectedSuggestedStocks[0].symbol}: ${this.selectedSuggestedStocks[0].companyName} is already in the list.`, 'Error!');
+          `${this.selectedSuggestedStock.symbol}: ${this.selectedSuggestedStock.companyName} is already in the list.`, 'Error!');
       }
       this.cleanupSearch();
     } else {
@@ -99,13 +98,14 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
   }
 
-  public suggestedStockSelected(): void {
-    this.searchString = this.selectedSuggestedStocks[0].symbol + ': ' + this.selectedSuggestedStocks[0].companyName;
+  public suggestedStockSelected(stock: Stock): void {
+    this.searchString = (stock) ? stock.symbol + ': ' + stock.companyName : '';
+    this.selectedSuggestedStock = stock;
     this.emptySuggestions = true;
   }
 
   private cleanupSearch(): void {
-    this.selectedSuggestedStocks = [];
+    this.selectedSuggestedStock = undefined;
     this.searchString = '';
   }
 }

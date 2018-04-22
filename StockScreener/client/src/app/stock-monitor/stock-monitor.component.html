@@ -12,14 +12,13 @@
             </h3>
             <div class="bar">
                 <input type="text" placeholder="Enter a company name or ticker to add" [(ngModel)]="searchString" 
-                (ngModelChange)="getSuggestedStocks($event)" maxlength="35"/>
+                (ngModelChange)="getSuggestedStocks(searchString)" maxlength="35"/>
                 <a (click)="addStock()"><img src="/assets/plus.ico" height="20" width="20"/></a>
             </div>
             <div style="min-height:115px">
-                <select multiple [(ngModel)]="selectedSuggestedStocks" class="suggested-stocks" 
-                    size="suggestedStocks.length" [hidden]="emptySuggestions" (ngModelChange)="suggestedStockSelected()">
-                    <option *ngFor="let stock of suggestedStocks" [ngValue]="stock">{{stock.symbol}} : {{stock.companyName}}</option>
-                </select>
+                <ol class="suggested-stocks" [hidden]="emptySuggestions">
+                    <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
+                </ol>
             </div>
             <table class="stock-table stock-table-rounded" [hidden]="stocks.length === 0">
                 <thead>

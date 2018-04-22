@@ -4,10 +4,10 @@
       <img src="/assets/delete.ico" height="20" width="20"/>
   </a>
   <div>
-    <a class="time-series-button" (click)="changeChartTimeSpan(0)">1 day</a>
-    <a class="time-series-button" (click)="changeChartTimeSpan(1)">10 day</a>
-    <a class="time-series-button" (click)="changeChartTimeSpan(2)">Last year</a>
-    <a class="time-series-button" (click)="changeChartTimeSpan(3)">5 year</a>
+    <!-- <a *ngIf="intraDayChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(0)">1 day</a> -->
+    <a *ngIf="dailyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(1)">10 day</a>
+    <a *ngIf="weeklyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(2)">Last year</a>
+    <a *ngIf="monthlyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(3)">5 year</a>
   </div>
   
   <div *ngIf="chart.showChart">

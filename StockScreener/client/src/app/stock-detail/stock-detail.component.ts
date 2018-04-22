@@ -16,6 +16,10 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
   public ticker = '';
   public chart: ChartComponent;
   public stockDetail: Stock | undefined;
+  public intraDayChartAvailable = false;
+  public dailyChartAvailable = false;
+  public weeklyChartAvailable = false;
+  public monthlyChartAvailable = false;
   constructor(
     private stockComponentSharedService: StockComponentSharedService,
     private stockMonitorService: StockMonitorService) {
@@ -27,8 +31,15 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
           (ticker) => {
             this.ticker = ticker;
             this.generateStockDetail(ticker);
-            this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
-              this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0));
+            // Determine which charts are available based on whether or not data is available
+            this.intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 0).length > 0;
+            this.dailyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 1).length > 0;
+            this.weeklyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 2).length > 0;
+            this.monthlyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 3).length > 0;
+            // this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
+            //   this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0));
+            this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 1),
+            this.stockComponentSharedService.getCachedStockLabels(this.ticker, 1));
             this.hideDetail = false;
         });
    }
