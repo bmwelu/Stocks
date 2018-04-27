@@ -16,7 +16,7 @@ router.get('/stocks/:ticker/timeseries-data/:interval', function(req, res){
     var interval = req.params.interval;
     stockservice.getStockTimeSeriesData(ticker, interval, function(error, results) {
       if (error) {
-        res.status(500).send({ error: 'Failure retrieving watched stocks' })
+        res.status(500).send({ error: 'Failure retrieving time series data for ' + ticker })
       }   
       res.send(results);
     });

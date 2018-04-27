@@ -19,24 +19,16 @@ export class StockComponentSharedService {
   // Service message commands
   public updateTicker(ticker: string): void {
     // Cache all graph data
-    // Observable.zip(this.stockMonitorService.getStockTimeSeriesData(ticker, 0),
-    //                this.stockMonitorService.getStockTimeSeriesData(ticker, 1),
-    //                this.stockMonitorService.getStockTimeSeriesData(ticker, 2),
-    //                this.stockMonitorService.getStockTimeSeriesData(ticker, 3))
-    //           .subscribe(([intraday, daily, weekly, monthly]) => {
-    //             this.cacheChartIntervalData(intraday, ticker, 0);
-    //             this.cacheChartIntervalData(daily, ticker, 1);
-    //             this.cacheChartIntervalData(weekly, ticker, 2);
-    //             this.cacheChartIntervalData(monthly, ticker, 3);
-    //             this.ticker.next(ticker); });
-     Observable.zip(this.stockMonitorService.getStockTimeSeriesData(ticker, 1),
-                this.stockMonitorService.getStockTimeSeriesData(ticker, 2),
-                this.stockMonitorService.getStockTimeSeriesData(ticker, 3))
-           .subscribe(([daily, weekly, monthly]) => {
-             this.cacheChartIntervalData(daily, ticker, 1);
-             this.cacheChartIntervalData(weekly, ticker, 2);
-             this.cacheChartIntervalData(monthly, ticker, 3);
-             this.ticker.next(ticker); });
+    Observable.zip(this.stockMonitorService.getStockTimeSeriesData(ticker, 0),
+                   this.stockMonitorService.getStockTimeSeriesData(ticker, 1),
+                   this.stockMonitorService.getStockTimeSeriesData(ticker, 2),
+                   this.stockMonitorService.getStockTimeSeriesData(ticker, 3))
+              .subscribe(([intraday, daily, weekly, monthly]) => {
+                this.cacheChartIntervalData(intraday, ticker, 0);
+                this.cacheChartIntervalData(daily, ticker, 1);
+                this.cacheChartIntervalData(weekly, ticker, 2);
+                this.cacheChartIntervalData(monthly, ticker, 3);
+                this.ticker.next(ticker); });
   }
 
   public getCachedStockList(): Stock[] {
@@ -60,7 +52,7 @@ export class StockComponentSharedService {
   private cacheChartIntervalData(chartData: any, ticker: string, interval: number): void {
       const labels = [];
       const data = [];
-      for (let i = chartData.length - 1; i > -1; i--) {
+      for (let i = 0; i < chartData.length; i++) {
          data.push(chartData[i][Object.keys(chartData[i])[0]]);
          labels.push(Object.keys(chartData[i])[0]);
       }
@@ -70,8 +62,8 @@ export class StockComponentSharedService {
 
   public clearTicker(ticker: string): void {
     // Remove all cached graph data
-    // localStorage.removeItem(`${ticker}:0:data`);
-    // localStorage.removeItem(`${ticker}:0:labels`);
+    localStorage.removeItem(`${ticker}:0:data`);
+    localStorage.removeItem(`${ticker}:0:labels`);
     localStorage.removeItem(`${ticker}:1:data`);
     localStorage.removeItem(`${ticker}:1:labels`);
     localStorage.removeItem(`${ticker}:2:data`);

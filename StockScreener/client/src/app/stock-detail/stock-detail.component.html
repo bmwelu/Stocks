@@ -1,60 +1,53 @@
-<div class="stock-detail" [hidden]="hideDetail">
-  <div *ngIf="stockDetail">{{stockDetail.companyName}} ({{stockDetail.symbol}})  </div>
-  <a class="detail-exit-button" (click)="hideStockDetails()">
-      <img src="/assets/delete.ico" height="20" width="20"/>
-  </a>
-  <div>
-    <a *ngIf="intraDayChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(0)">1 day</a>
-    <a *ngIf="dailyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(1)">10 day</a>
-    <a *ngIf="weeklyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(2)">Last year</a>
-    <a *ngIf="monthlyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(3)">5 year</a>
-  </div>
-  
-  <div *ngIf="chart.showChart">
-    <canvas baseChart width="500" height="285"
-                [datasets]="chart.lineChartData"
-                [labels]="chart.lineChartLabels"
-                [options]="chart.lineChartOptions"
-                [colors]="chart.lineChartColors"
-                [chartType]="chart.lineChartType"
-                (chartHover)="chart.chartHovered($event)"
-                (chartClick)="chart.chartClicked($event)"></canvas>
-    <div class="stock-detail-info">
-        <div *ngIf="stockDetail">
-            <table>
-                <tr>
-                    <td>Company Name</td>
-                    <td>{{stockDetail.companyName}}</td>
-                </tr>
-                <tr>
-                    <td>Symbol</td>
-                    <td>{{stockDetail.symbol}}</td>
-                </tr>
-                <tr>
-                    <td>Latest Price</td>
-                    <td [style.color]="stockDetail.latestPrice ? 'black' : 'red'">{{stockDetail.latestPrice ? stockDetail.latestPrice : "Market is closed"}}</td>
-                </tr>
-                <tr>
-                    <td>Primary Exchange</td>
-                    <td>{{stockDetail.primaryExchange}}</td>
-                </tr>
-            </table>
-        </div>
-        <div *ngIf="stockDetail">
-            <table>
-                <tr>
-                    <td>Sector</td>
-                    <td>{{stockDetail.sector}}</td>
-                </tr>
-                <tr>
-                    <td>52 Week High</td>
-                    <td>{{stockDetail.week52High | currency}}</td>
-                </tr>
-                <tr>
-                    <td>52 Week Low</td>
-                    <td>{{stockDetail.week52Low | currency}}</td>
-                </tr>
-            </table>
+<div class="stock-detail" *ngIf="showDetail">
+    <div *ngIf="stockDetail">{{stockDetail.companyName}} ({{stockDetail.symbol}}) </div>
+    <a class="detail-exit-button" (click)="hideStockDetails()">
+        <img src="/assets/delete.ico" height="20" width="20" />
+    </a>
+    <div>
+        <a *ngIf="intraDayChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(0)">1 day</a>
+        <a *ngIf="dailyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(1)">1 month</a>
+        <a *ngIf="weeklyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(2)">1 year</a>
+        <a *ngIf="monthlyChartAvailable" class="time-series-button" (click)="changeChartTimeSpan(3)">5 years</a>
+    </div>
+    <div *ngIf="chart.showChart">
+        <canvas baseChart width="500" height="285" [datasets]="chart.lineChartData" [labels]="chart.lineChartLabels" [options]="chart.lineChartOptions" [colors]="chart.lineChartColors" [chartType]="chart.lineChartType" (chartHover)="chart.chartHovered($event)" (chartClick)="chart.chartClicked($event)"></canvas>
+        <div class="stock-detail-info">
+            <div *ngIf="stockDetail">
+                <table>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>{{stockDetail.companyName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Symbol</td>
+                        <td>{{stockDetail.symbol}}</td>
+                    </tr>
+                    <tr>
+                        <td>Latest Price</td>
+                        <td [style.color]="stockDetail.latestPrice ? 'black' : 'red'">{{stockDetail.latestPrice ? stockDetail.latestPrice : "Market is closed"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Primary Exchange</td>
+                        <td>{{stockDetail.primaryExchange}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div *ngIf="stockDetail">
+                <table>
+                    <tr>
+                        <td>Sector</td>
+                        <td [style.color]="stockDetail.sector ? 'black' : 'red'"> {{stockDetail.sector ? stockDetail.sector : "No Sector"}}</td>
+                    </tr>
+                    <tr>
+                        <td>52 Week High</td>
+                        <td>{{stockDetail.week52High | currency}}</td>
+                    </tr>
+                    <tr>
+                        <td>52 Week Low</td>
+                        <td>{{stockDetail.week52Low | currency}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>

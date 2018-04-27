@@ -25,6 +25,7 @@
                         <th> Company Name </th>
                         <th> Symbol </th>
                         <th> Latest Price </th>
+                        <th> Percent Change </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -33,7 +34,8 @@
                         <td>{{ x.companyName }}</td>
                         <td><a (click)="getTickerInfo(x.symbol)">{{ x.symbol }}</a></td>
                         <td>{{ x.latestPrice | currency}}</td>
-                        <td><a (click)="deleteStock(x.symbol)"><img src="/assets/delete.ico" height="20" width="20"/></a></td>
+                        <td [style.color]="(x.percentChange && x.percentChange.charAt(0)) === '-' ? 'red' : 'green'">{{ x.percentChange }}</td>
+                        <td><a (click)="deleteStock(x.symbol)"><img src="/assets/delete.ico" height="20" width="20"/></a></td>            
                     </tr>
                 </tbody>
             </table>

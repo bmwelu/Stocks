@@ -1,8 +1,10 @@
-function TimeSeriesBase (requestURL) { 
-    this.requestURL = requestURL;
-}
+const TimeSeriesBase = require('./time-series-base')
 
-TimeSeriesBase.prototype.parseBody = function(body, objectString) {
+function TimeSeriesOneDay() {
+    TimeSeriesBase.call(this,'1d');
+  }
+
+  TimeSeriesOneDay.prototype.parseBody = function(body) {
     var ungroomedData = JSON.parse(body);
     var groomedData = [];
     for (var key in ungroomedData) {
@@ -13,11 +15,11 @@ TimeSeriesBase.prototype.parseBody = function(body, objectString) {
        
         if (obj.hasOwnProperty('close')) {
             var clone = {};
-            clone[obj["date"]] = obj["close"];
+            clone[obj["date"] + obj["minute"]] = obj["close"];
             groomedData.push(clone);
         }
     }
     return groomedData;
   }
 
-module.exports = TimeSeriesBase
+  module.exports = TimeSeriesOneDay

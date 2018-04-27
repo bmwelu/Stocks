@@ -11,7 +11,7 @@ const SuggestStockReturnAmount = 5;
 
 module.exports = {
     updateStockPrices : function (tickers, callback) {
-        request('https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=' + tickers +'&apikey=' + GlobalConstants.alphavantageapikey, function(error, response, body) {
+        request(GlobalConstants.stockInfoURL + 'market/batch?symbols=' + tickers +'&types=quote&range=1m', function(error, response, body) {
             //Check for error
             if (error) {
                 return callback(error);
@@ -21,13 +21,17 @@ module.exports = {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
             //groom data
-            var ungroomedData = JSON.parse(body)['Stock Quotes'];
+            var ungroomedData = JSON.parse(body);
             var groomedData = [];
-            for(let i = 0; i < ungroomedData.length; i++) {
-                const clone = {};
-                clone["symbol"] = ungroomedData[i]["1. symbol"];
-                clone["latestPrice"] = ungroomedData[i]["2. price"];
-                groomedData.push(clone);
+
+            for (var prop in ungroomedData) {
+                if (ungroomedData.hasOwnProperty(prop)) {
+                    const clone = {};
+                    clone["symbol"] = ungroomedData[prop]["quote"]["symbol"];
+                    clone["latestPrice"] = ungroomedData[prop]["quote"]["latestPrice"];
+                    clone["percentChange"] = (parseFloat(ungroomedData[prop]["quote"]["changePercent"]) * 100).toFixed(2) + '%';
+                    groomedData.push(clone);
+                }
             }
             callback(null,groomedData);
         })
@@ -35,13 +39,15 @@ module.exports = {
 
     getStockTimeSeriesData: function (ticker, interval, callback) {
         if (parseInt(interval) < IntradayInterval || parseInt(interval) > MontlyInterval) {
-            return callback(new Error('Invalid interval. Must be 0(IntradayInterval) through 3(MontlyInterval)'));
+            return callback(new Error('Invalid interval. Must be 0(one day) through 3(5 years)'));
         }
         const timeSeriesFactory = new TimeSeriesFactory();
         const timeSeries = timeSeriesFactory.createTimeSeries(interval);
-        request(timeSeries.requestURL + ticker +'&apikey=' + GlobalConstants.alphavantageapikey, function(error, response, body) {
+        //request(timeSeries.requestURL + ticker +'&apikey=' + GlobalConstants.alphavantageapikey, function(error, response, body) {
+        request(GlobalConstants.stockInfoURL + ticker + '/chart/' + timeSeries.requestURL, function(error, response, body) {
+            
             //Check for error
-            if (error) {timeSeries.requestURL
+            if (error) {
                 return callback(error);
             }
             //Check for success status code
@@ -54,7 +60,7 @@ module.exports = {
     },
 
     getStockDetail : function (ticker,callback) {
-        request('https://api.iextrading.com/1.0/stock/' + ticker + '/quote', function(error, response, body) {
+        request(GlobalConstants.stockInfoURL + ticker + '/quote', function(error, response, body) {
             //Check for error
             if (error) {
                 return callback(error);
@@ -67,11 +73,12 @@ module.exports = {
             var ungroomedData = JSON.parse(body);
 
             const stockDetail = new StockDetail(ungroomedData["symbol"],
-                                                ungroomedData["companyName"],
+                                                ungroomedData["companyName"].substring(0,28),
                                                 ungroomedData["primaryExchange"],
                                                 ungroomedData["sector"],
                                                 ungroomedData["week52High"],
-                                                ungroomedData["week52Low"])
+                                                ungroomedData["week52Low"],
+                                                ungroomedData["latestPrice"])
             callback(null,stockDetail);
         })
     },
@@ -93,7 +100,7 @@ module.exports = {
             for(let i = 0; i < ungroomedData.length && i < SuggestStockReturnAmount; i++) {
                 var clone = {};
                 clone["symbol"] = ungroomedData[i]["Value"];
-                clone["companyName"] = ungroomedData[i]["Text"];
+                clone["companyName"] = ungroomedData[i]["Text"].substring(0,28);
                 groomedData.push(clone);
             }
             callback(null,groomedData);

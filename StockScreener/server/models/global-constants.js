@@ -1,10 +1,10 @@
-const alphavantageapikey = '5SIWA2DDI2ZPTICC'
+const stockInfoURL = 'https://api.iextrading.com/1.0/stock/'
 
-class GlobalContants {
+class GlobalConstants {
 
-  static get alphavantageapikey() {
-    return alphavantageapikey;
+  static get stockInfoURL() {
+    return stockInfoURL;
   }
 }
 
-module.exports = GlobalContants
+module.exports = GlobalConstants

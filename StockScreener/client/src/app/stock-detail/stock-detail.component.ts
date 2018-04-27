@@ -12,7 +12,7 @@ import 'rxjs/add/operator/takeUntil';
 })
 
 export class StockDetailComponent extends SubscriberEntity implements OnInit  {
-  public hideDetail = true;
+  public showDetail = false;
   public ticker = '';
   public chart: ChartComponent;
   public stockDetail: Stock | undefined;
@@ -32,25 +32,25 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
             this.ticker = ticker;
             this.generateStockDetail(ticker);
             // Determine which charts are available based on whether or not data is available
-            // this.intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 0).length > 0;
+            this.intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 0).length > 0;
             this.dailyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 1).length > 0;
             this.weeklyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 2).length > 0;
             this.monthlyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 3).length > 0;
-            // this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
-            //   this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0));
-            this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 1),
-            this.stockComponentSharedService.getCachedStockLabels(this.ticker, 1));
-            this.hideDetail = false;
+            this.intraDayChartAvailable ? this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
+              this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0)) :
+              this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 1),
+              this.stockComponentSharedService.getCachedStockLabels(this.ticker, 1));
+            this.showDetail = true;
         });
    }
 
   public ngOnInit(): void {
-    this.hideDetail = true;
+    this.showDetail = false;
   }
 
   public hideStockDetails(): void {
     this.chart.populateData([], []);
-    this.hideDetail = true;
+    this.showDetail = false;
     this.stockComponentSharedService.clearTicker(this.ticker);
   }
 

@@ -14,12 +14,12 @@ export class ChartComponent implements OnInit {
   public lineChartOptions = {
     responsive: true,
     legend: {display: false},
-    // scales:
-    // {
-    //     xAxes: [{
-    //         display: false
-    //     }]
-    // }
+    scales:
+    {
+        xAxes: [{
+            display: false
+        }]
+    },
     elements: { point: { radius: 0 } }
   };
   public lineChartColors = [

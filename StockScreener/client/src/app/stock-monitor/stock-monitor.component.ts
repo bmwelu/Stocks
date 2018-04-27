@@ -55,6 +55,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
           const stockToUpdate = stocks.find((st) => st.symbol === stock.symbol);
           if (stockToUpdate !== undefined) {
             stockToUpdate.latestPrice = stock.latestPrice;
+            stockToUpdate.percentChange = stock.percentChange;
           }
         }
       });
