@@ -23,12 +23,13 @@ export class StockComponentSharedService {
                    this.stockMonitorService.getStockTimeSeriesData(ticker, 1),
                    this.stockMonitorService.getStockTimeSeriesData(ticker, 2),
                    this.stockMonitorService.getStockTimeSeriesData(ticker, 3))
-              .subscribe(([intraday, daily, weekly, monthly]) => {
-                this.cacheChartIntervalData(intraday, ticker, 0);
-                this.cacheChartIntervalData(daily, ticker, 1);
-                this.cacheChartIntervalData(weekly, ticker, 2);
-                this.cacheChartIntervalData(monthly, ticker, 3);
-                this.ticker.next(ticker); });
+              .subscribe(([oneDay, oneWeek, oneYear, fiveYears]) => {
+                    this.cacheChartIntervalData(oneDay, ticker, 0),
+                    this.cacheChartIntervalData(oneWeek, ticker, 1),
+                    this.cacheChartIntervalData(oneYear, ticker, 2),
+                    this.cacheChartIntervalData(fiveYears, ticker, 3);
+                    this.ticker.next(ticker);
+                });
   }
 
   public getCachedStockList(): Stock[] {
@@ -50,12 +51,13 @@ export class StockComponentSharedService {
   }
 
   private cacheChartIntervalData(chartData: any, ticker: string, interval: number): void {
-      const labels = [];
-      const data = [];
+      const labels: String[] = [];
+      const data: Number[] = [];
       for (let i = 0; i < chartData.length; i++) {
          data.push(chartData[i][Object.keys(chartData[i])[0]]);
          labels.push(Object.keys(chartData[i])[0]);
       }
+
       localStorage.setItem(`${ticker}:${interval}:data`, JSON.stringify(data));
       localStorage.setItem(`${ticker}:${interval}:labels`, JSON.stringify(labels));
   }

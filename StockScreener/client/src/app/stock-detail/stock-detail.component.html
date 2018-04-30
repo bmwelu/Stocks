@@ -24,7 +24,7 @@
                     </tr>
                     <tr>
                         <td>Latest Price</td>
-                        <td [style.color]="stockDetail.latestPrice ? 'black' : 'red'">{{stockDetail.latestPrice ? stockDetail.latestPrice : "Market is closed"}}</td>
+                        <td [style.color]="stockDetail.latestPrice ? 'black' : 'red'">{{stockDetail.latestPrice ? (stockDetail.latestPrice | currency) : "Market is closed"}}</td>
                     </tr>
                     <tr>
                         <td>Primary Exchange</td>

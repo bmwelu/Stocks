@@ -42,10 +42,8 @@ module.exports = {
             return callback(new Error('Invalid interval. Must be 0(one day) through 3(5 years)'));
         }
         const timeSeriesFactory = new TimeSeriesFactory();
-        const timeSeries = timeSeriesFactory.createTimeSeries(interval);
-        //request(timeSeries.requestURL + ticker +'&apikey=' + GlobalConstants.alphavantageapikey, function(error, response, body) {
-        request(GlobalConstants.stockInfoURL + ticker + '/chart/' + timeSeries.requestURL, function(error, response, body) {
-            
+        const timeSeries = timeSeriesFactory.createTimeSeries(interval, ticker);
+        request(GlobalConstants.stockInfoURL + ticker + '/chart/' + timeSeries.requestURL, function(error, response, body) {          
             //Check for error
             if (error) {
                 return callback(error);
@@ -73,12 +71,13 @@ module.exports = {
             var ungroomedData = JSON.parse(body);
 
             const stockDetail = new StockDetail(ungroomedData["symbol"],
-                                                ungroomedData["companyName"].substring(0,28),
+                                                ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
                                                 ungroomedData["primaryExchange"],
                                                 ungroomedData["sector"],
                                                 ungroomedData["week52High"],
                                                 ungroomedData["week52Low"],
-                                                ungroomedData["latestPrice"])
+                                                ungroomedData["latestPrice"],
+                                                ungroomedData["previousClose"])
             callback(null,stockDetail);
         })
     },
@@ -100,8 +99,34 @@ module.exports = {
             for(let i = 0; i < ungroomedData.length && i < SuggestStockReturnAmount; i++) {
                 var clone = {};
                 clone["symbol"] = ungroomedData[i]["Value"];
-                clone["companyName"] = ungroomedData[i]["Text"].substring(0,28);
+                clone["companyName"] = ungroomedData[i]["Text"].substring(0,GlobalConstants.maxStockDescriptionLength);
                 groomedData.push(clone);
+            }
+            callback(null,groomedData);
+        })
+    },
+
+    getPreviousCloseStockValue : function (ticker, callback) {
+        request(GlobalConstants.stockInfoURL + 'market/batch?symbols=' + ticker +'&types=quote&range=1m', function(error, response, body) {
+            //Check for error
+            if (error) {
+                return callback(error);
+            }
+            //Check for success status code
+            if (response.statusCode !== SuccessStatusCode) {
+                return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
+            }
+            //groom data
+            var ungroomedData = JSON.parse(body);
+            var groomedData = [];
+
+            for (var prop in ungroomedData) {
+                if (ungroomedData.hasOwnProperty(prop)) {
+                    const clone = {};
+                    clone["symbol"] = ungroomedData[prop]["quote"]["symbol"];
+                    clone["previousClose"] = ungroomedData[prop]["quote"]["previousClose"];
+                    groomedData.push(clone);
+                }
             }
             callback(null,groomedData);
         })

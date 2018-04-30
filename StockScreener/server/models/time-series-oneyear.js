@@ -1,7 +1,7 @@
 const TimeSeriesBase = require('./time-series-base')
 
-function TimeSeriesOneYear() {
-    TimeSeriesBase.call(this,'1y');
+function TimeSeriesOneYear(ticker) {
+    TimeSeriesBase.call(this,'1y',ticker);
   }
 
   TimeSeriesOneYear.prototype.parseBody = function(body) {

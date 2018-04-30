@@ -1,5 +1,6 @@
-function TimeSeriesBase (requestURL) { 
+function TimeSeriesBase (requestURL, ticker) { 
     this.requestURL = requestURL;
+    this.ticker = ticker;
 }
 
 TimeSeriesBase.prototype.parseBody = function(body, objectString) {

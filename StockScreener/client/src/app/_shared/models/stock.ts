@@ -7,4 +7,5 @@ export interface Stock {
     sector: string;
     week52High: string;
     week52Low: string;
+    previousClose: string;
 }

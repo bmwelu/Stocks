@@ -1,3 +1,6 @@
+#Demo
+https://bwelustockscreenerwebsite.azurewebsites.net/
+
 # StockScreener
 My goal is to learn Angular 5, Node, and express.  This project is creating some common widgets that are useful for monitoring and researching stocks.
 
@@ -22,10 +25,10 @@ Green/Red arrows indicating last update positive/negative
 
 Considerations for security, DOS attacks, etc.
 
-Show charts have point data on very top, ugly to read
-
 Cache recommended stock list?
 
 Once the details view is open, continue to update? For current price
 
 In client code create global constaints for intraday,daily,weekly,monthly values (0,1,2,3)
+
+Only have timed api calls during trading hours
