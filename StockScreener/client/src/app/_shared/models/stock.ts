@@ -1,3 +1,5 @@
+import { StockNews } from './stock-news';
+
 export interface Stock {
     companyName: string;
     symbol: string;
@@ -8,4 +10,5 @@ export interface Stock {
     week52High: string;
     week52Low: string;
     previousClose: string;
+    stockNews: StockNews[];
 }

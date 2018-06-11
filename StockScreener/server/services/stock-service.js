@@ -3,6 +3,7 @@ const request = require('request');
 //const db = mongojs('mongodb://bmwelu:bmwelu1@ds245337.mlab.com:45337/bmwelu_stocks', ['stocks_watched']);
 const TimeSeriesFactory = require('../factories/time-series-factory');
 const StockDetail = require('../models/stock-detail');
+const StockNews = require('../models/stock-news');
 const GlobalConstants = require('../models/global-constants');
 const SuccessStatusCode = 200;
 const IntradayInterval = 0;
@@ -10,6 +11,9 @@ const MontlyInterval = 3;
 const SuggestStockReturnAmount = 5;
 
 module.exports = {
+
+    getStockNews : getStockNews,
+
     updateStockPrices : function (tickers, callback) {
         request(GlobalConstants.stockInfoURL + 'market/batch?symbols=' + tickers +'&types=quote&range=1m', function(error, response, body) {
             //Check for error
@@ -58,7 +62,7 @@ module.exports = {
     },
 
     getStockDetail : function (ticker,callback) {
-        request(GlobalConstants.stockInfoURL + ticker + '/quote', function(error, response, body) {
+        request(GlobalConstants.stockInfoURL + ticker + '/quote' , function(error, response, body) {
             //Check for error
             if (error) {
                 return callback(error);
@@ -70,20 +74,27 @@ module.exports = {
             //groom data
             var ungroomedData = JSON.parse(body);
 
-            const stockDetail = new StockDetail(ungroomedData["symbol"],
-                                                ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
-                                                ungroomedData["primaryExchange"],
-                                                ungroomedData["sector"],
-                                                ungroomedData["week52High"],
-                                                ungroomedData["week52Low"],
-                                                ungroomedData["latestPrice"],
-                                                ungroomedData["previousClose"])
-            callback(null,stockDetail);
+            getStockNews(ticker, function(error, results) {
+                if (error) {
+                    return callback(error);
+                }
+                const stockDetail = new StockDetail(ungroomedData["symbol"],
+                    ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
+                    ungroomedData["primaryExchange"],
+                    ungroomedData["sector"],
+                    ungroomedData["week52High"],
+                    ungroomedData["week52Low"],
+                    ungroomedData["latestPrice"],
+                    ungroomedData["previousClose"],
+                    results)
+
+                callback(null,stockDetail);
+            })
         })
     },
 
     getSuggestedStocks : function (searchString, callback) {
-        request('http://search.xignite.com/Search/Suggest?parameter=XigniteFinancials.GetCompanyBalanceSheet.Identifier&term=' + searchString + '&tags=XNYS,XNAS', function(error, response, body) {
+        request(GlobalConstants.suggestedStockURL + searchString + '&tags=XNYS,XNAS', function(error, response, body) {
             //Check for error
             if (error) {
                 return callback(error);              
@@ -132,3 +143,30 @@ module.exports = {
         })
     }
 };
+
+function getStockNews(ticker, callback) {
+    request(GlobalConstants.stockInfoURL + ticker + '/news/last/' + GlobalConstants.maxNewsArcticles, function(error, response, body) {
+        //Check for error
+        if (error) {
+            return callback(error);
+        }
+        //Check for success status code
+        if (response.statusCode !== SuccessStatusCode) {
+            return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
+        }
+        //groom data
+        var ungroomedData = JSON.parse(body);
+        var groomedData = [];
+
+        for (var prop in ungroomedData) {
+            if (ungroomedData.hasOwnProperty(prop)) {
+                const arcticle = new StockNews(
+                    ungroomedData[prop]["headline"], 
+                    ungroomedData[prop]["url"], 
+                    ungroomedData[prop]["source"])
+                groomedData.push(arcticle);
+            }
+        }
+        callback(null,groomedData);
+    })
+}

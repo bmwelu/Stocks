@@ -13,13 +13,14 @@
   "private": true,
   "dependencies": {
     "chart.js": "^2.7.2",
-    "core-js": "^2.4.1",
-    "express": "^4.16.2",
-    "mongojs": "^2.4.1",
+    "core-js": "^2.5.7",
+    "express": "^4.16.3",
+    "mongojs": "^2.6.0",
     "ng2-charts": "^1.6.0",
-    "nodemon": "^1.14.8",
-    "request": "^2.83.0",
-    "rxjs": "^5.5.2",
-    "zone.js": "^0.8.14"
-  }
+    "nodemon": "^1.17.5",
+    "request": "^2.87.0",
+    "rxjs": "^5.5.11",
+    "zone.js": "^0.8.26"
+  },
+  "main": "index.js"
 }

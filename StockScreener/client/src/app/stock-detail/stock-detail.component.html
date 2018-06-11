@@ -49,5 +49,20 @@
                 </table>
             </div>
         </div>
+        <div *ngIf="stockDetail">
+            <table class="table-news">
+                <thead>
+                    <th colspan="2">
+                        Recent News
+                    </th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let x of stockDetail.stockNews">
+                        <td><a [href]="x.url" target="_blank" >{{x.headline}}</a></td>    
+                        <td>{{x.source}}</td>     
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

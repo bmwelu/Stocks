@@ -1,4 +1,4 @@
-#Demo
+# Demo
 https://bwelustockscreenerwebsite.azurewebsites.net/
 
 # StockScreener
@@ -15,9 +15,7 @@ Unit tests for front and backend
 
 Accounts to save stocks, etc.
 
-Attach live news to each stocks
-
-Modules for currencies and sectors
+Modules for currencies
 
 After hours moves
 
@@ -28,7 +26,5 @@ Considerations for security, DOS attacks, etc.
 Cache recommended stock list?
 
 Once the details view is open, continue to update? For current price
-
-In client code create global constaints for intraday,daily,weekly,monthly values (0,1,2,3)
 
 Only have timed api calls during trading hours
