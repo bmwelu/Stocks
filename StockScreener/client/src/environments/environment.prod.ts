@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiURL: 'https://bwelustockscreener.azurewebsites.net/'
+  apiURL: 'http://stock-server-stock-server.193b.starter-ca-central-1.openshiftapps.com/'
 };
