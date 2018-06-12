@@ -2,6 +2,9 @@ var express = require('express');
 var stocks = require('./routes/stocks');
 var sectors = require('./routes/sectors');
 var app = express();
+const DefaultPort = 8080;
+
+var port = process.env.PORT || DefaultPort;
 
 // Add headers
 app.use(function (req, res, next) {
@@ -14,9 +17,6 @@ app.use('/', stocks);
 app.use('/stocks', stocks);
 app.use('/sectors', sectors);
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 80
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || 'localhost'
-
-app.listen(server_port, server_ip_address, function () {
-    console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
+app.listen(port, function(){
+	console.log('Server started on port ' + port);
 });
