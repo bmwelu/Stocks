@@ -1,5 +1,5 @@
 # Demo
-https://bwelustockscreenerwebsite.azurewebsites.net/
+https://bmwelu.azurewebsites.net/
 
 # StockScreener
 My goal is to learn Angular 5, Node, and express.  This project is creating some common widgets that are useful for monitoring and researching stocks.

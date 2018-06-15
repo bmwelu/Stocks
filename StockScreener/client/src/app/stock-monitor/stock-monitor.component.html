@@ -19,7 +19,7 @@
                     <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
                 </ol>
             </div>
-            <table class="table table-rounded" [hidden]="stocks.length === 0">
+            <table class="table table-rounded stock-table" [hidden]="stocks.length === 0">
                 <thead>
                     <tr>
                         <th> Company Name </th>

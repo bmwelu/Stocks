@@ -24,20 +24,21 @@ module.exports = {
             if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
-            //groom data
-            var ungroomedData = JSON.parse(body);
-            var groomedData = [];
-
-            for (var prop in ungroomedData) {
-                if (ungroomedData.hasOwnProperty(prop)) {
-                    const clone = {};
-                    clone["symbol"] = ungroomedData[prop]["quote"]["symbol"];
-                    clone["latestPrice"] = ungroomedData[prop]["quote"]["latestPrice"];
-                    clone["percentChange"] = (parseFloat(ungroomedData[prop]["quote"]["changePercent"]) * 100).toFixed(2) + '%';
-                    groomedData.push(clone);
-                }
+            try
+            {
+                //groom data
+                var ungroomedData = JSON.parse(body);
+                var result = Object.keys(ungroomedData).map(function(key) {
+                    return { symbol: ungroomedData[key]["quote"]["symbol"], 
+                             latestPrice: ungroomedData[key]["quote"]["latestPrice"],
+                             percentChange:  (parseFloat(ungroomedData[key]["quote"]["changePercent"]) * 100).toFixed(2) + '%'}
+                });
+                callback(null,result);
             }
-            callback(null,groomedData);
+            catch (err)
+            {
+                return callback(err);
+            }
         })
     },
 
@@ -56,8 +57,15 @@ module.exports = {
             if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
-            //groom data
-            callback(null,timeSeries.parseBody(body));
+            try
+            {
+                //groom data
+                callback(null,timeSeries.parseBody(body));
+            }
+            catch (err)
+            {
+                return callback(err);
+            }
         });
     },
 
@@ -71,25 +79,32 @@ module.exports = {
             if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
-            //groom data
-            var ungroomedData = JSON.parse(body);
+            try
+            {
+                //groom data
+                var ungroomedData = JSON.parse(body);
 
-            getStockNews(ticker, function(error, results) {
-                if (error) {
-                    return callback(error);
-                }
-                const stockDetail = new StockDetail(ungroomedData["symbol"],
-                    ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
-                    ungroomedData["primaryExchange"],
-                    ungroomedData["sector"],
-                    ungroomedData["week52High"],
-                    ungroomedData["week52Low"],
-                    ungroomedData["latestPrice"],
-                    ungroomedData["previousClose"],
-                    results)
-
-                callback(null,stockDetail);
-            })
+                getStockNews(ticker, function(error, results) {
+                    if (error) {
+                        return callback(error);
+                    }
+                    const stockDetail = new StockDetail(ungroomedData["symbol"],
+                        ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
+                        ungroomedData["primaryExchange"],
+                        ungroomedData["sector"],
+                        ungroomedData["week52High"],
+                        ungroomedData["week52Low"],
+                        ungroomedData["latestPrice"],
+                        ungroomedData["previousClose"],
+                        results)
+    
+                    callback(null,stockDetail);
+                });
+            }
+            catch (err)
+            {
+                return callback(err);
+            }
         })
     },
 
@@ -103,17 +118,23 @@ module.exports = {
             if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));           
             }
-
-            //groom data
-            var ungroomedData = JSON.parse(body)['Results'];
-            var groomedData = [];    
-            for(let i = 0; i < ungroomedData.length && i < SuggestStockReturnAmount; i++) {
-                var clone = {};
-                clone["symbol"] = ungroomedData[i]["Value"];
-                clone["companyName"] = ungroomedData[i]["Text"].substring(0,GlobalConstants.maxStockDescriptionLength);
-                groomedData.push(clone);
+            try
+            {
+                //groom data
+                var ungroomedData = JSON.parse(body)['Results'];
+                var groomedData = [];    
+                for(let i = 0; i < ungroomedData.length && i < SuggestStockReturnAmount; i++) {
+                    var clone = {};
+                    clone["symbol"] = ungroomedData[i]["Value"];
+                    clone["companyName"] = ungroomedData[i]["Text"].substring(0,GlobalConstants.maxStockDescriptionLength);
+                    groomedData.push(clone);
+                }
+                callback(null,groomedData);
             }
-            callback(null,groomedData);
+            catch (err)
+            {
+                return callback(err);
+            }
         })
     },
 
@@ -127,19 +148,20 @@ module.exports = {
             if (response.statusCode !== SuccessStatusCode) {
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
             }
-            //groom data
-            var ungroomedData = JSON.parse(body);
-            var groomedData = [];
-
-            for (var prop in ungroomedData) {
-                if (ungroomedData.hasOwnProperty(prop)) {
-                    const clone = {};
-                    clone["symbol"] = ungroomedData[prop]["quote"]["symbol"];
-                    clone["previousClose"] = ungroomedData[prop]["quote"]["previousClose"];
-                    groomedData.push(clone);
-                }
+            try
+            {
+                //groom data
+                var ungroomedData = JSON.parse(body);
+                var result = Object.keys(ungroomedData).map(function(key) {
+                    return { symbol: ungroomedData[key]["quote"]["symbol"], 
+                             previousClose: ungroomedData[key]["quote"]["previousClose"]}
+                });
+                callback(null,result);
             }
-            callback(null,groomedData);
+            catch (err)
+            {
+                return callback(err);
+            }
         })
     }
 };
@@ -154,19 +176,20 @@ function getStockNews(ticker, callback) {
         if (response.statusCode !== SuccessStatusCode) {
             return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
         }
-        //groom data
-        var ungroomedData = JSON.parse(body);
-        var groomedData = [];
-
-        for (var prop in ungroomedData) {
-            if (ungroomedData.hasOwnProperty(prop)) {
-                const arcticle = new StockNews(
-                    ungroomedData[prop]["headline"], 
-                    ungroomedData[prop]["url"], 
-                    ungroomedData[prop]["source"])
-                groomedData.push(arcticle);
-            }
+        try
+        {
+            //groom data
+            var ungroomedData = JSON.parse(body);
+            var result = Object.keys(ungroomedData).map(function(key) {
+                return { headline: ungroomedData[key]["headline"], 
+                         url: ungroomedData[key]["url"],
+                         source: ungroomedData[key]["source"]}
+            });
+            callback(null,result);
         }
-        callback(null,groomedData);
+        catch (err)
+        {
+            return callback(err);
+        }
     })
 }
