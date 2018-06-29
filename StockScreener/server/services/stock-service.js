@@ -3,18 +3,97 @@ const request = require('request');
 //const db = mongojs('mongodb://bmwelu:bmwelu1@ds245337.mlab.com:45337/bmwelu_stocks', ['stocks_watched']);
 const TimeSeriesFactory = require('../factories/time-series-factory');
 const StockDetail = require('../models/stock-detail');
-const StockNews = require('../models/stock-news');
 const GlobalConstants = require('../models/global-constants');
 const SuccessStatusCode = 200;
 const IntradayInterval = 0;
 const MontlyInterval = 3;
 const SuggestStockReturnAmount = 5;
 
-module.exports = {
+class StockService {
+    getStockNews(id, callback) { 
+        var maxNewsArcticles = (id.toUpperCase() === 'MARKET') ? GlobalConstants.maxMarketNewsArcticles : GlobalConstants.maxStockNewsArcticles;
+        request(GlobalConstants.stockInfoURL + id + '/news/last/' + maxNewsArcticles, function(error, response, body) {
+            //Check for error
+            if (error) {
+                return callback(error);
+            }
+            //Check for success status code
+            if (response.statusCode !== SuccessStatusCode) {
+                return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
+            }
+            try
+            {
+                //groom data
+                var ungroomedData = JSON.parse(body);
+                var result;
+                if(id.toUpperCase() === 'MARKET')
+                {
+                    result = Object.keys(ungroomedData).map(function(key) {
+                        return { headline: ungroomedData[key]["headline"], 
+                                 url: ungroomedData[key]["url"],
+                                 source: ungroomedData[key]["source"],
+                                 image: ungroomedData[key]["image"]}
+                    });
+                }
+                else
+                {
+                    result = Object.keys(ungroomedData).map(function(key) {
+                        return { headline: ungroomedData[key]["headline"], 
+                                 url: ungroomedData[key]["url"],
+                                 source: ungroomedData[key]["source"]}
+                    });
+                }
+    
+                callback(null,result);
+            }
+            catch (err)
+            {
+                return callback(err);
+            }
+        })
+    }
 
-    getStockNews : getStockNews,
+    getStockDetail(ticker,callback) {
+        request(GlobalConstants.stockInfoURL + ticker + '/quote' , function(error, response, body) {
+            //Check for error
+            if (error) {
+                return callback(error);
+            }
+            //Check for success status code
+            if (response.statusCode !== SuccessStatusCode) {
+                return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
+            }
+            try
+            {
+                //groom data
+                var ungroomedData = JSON.parse(body);
+                
+                self.getStockNews(ticker, function(error, newsResults) {
+                    if (error) {
+                        return callback(error);
+                    }
+                    
+                    const stockDetail = new StockDetail(ungroomedData["symbol"],
+                        ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
+                        ungroomedData["primaryExchange"],
+                        ungroomedData["sector"],
+                        ungroomedData["week52High"],
+                        ungroomedData["week52Low"],
+                        ungroomedData["latestPrice"],
+                        ungroomedData["previousClose"],
+                        newsResults)
+                        
+                    callback(null,stockDetail);
+                });
+            }
+            catch (err)
+            {
+                return callback(err);
+            }
+        })
+    }
 
-    updateStockPrices : function (tickers, callback) {
+    updateStockPrices(tickers, callback) {
         request(GlobalConstants.stockInfoURL + 'market/batch?symbols=' + tickers +'&types=quote&range=1m', function(error, response, body) {
             //Check for error
             if (error) {
@@ -40,9 +119,9 @@ module.exports = {
                 return callback(err);
             }
         })
-    },
+    }
 
-    getStockTimeSeriesData: function (ticker, interval, callback) {
+    getStockTimeSeriesData(ticker, interval, callback) {
         if (parseInt(interval) < IntradayInterval || parseInt(interval) > MontlyInterval) {
             return callback(new Error('Invalid interval. Must be 0(one day) through 3(5 years)'));
         }
@@ -67,48 +146,9 @@ module.exports = {
                 return callback(err);
             }
         });
-    },
+    }
 
-    getStockDetail : function (ticker,callback) {
-        request(GlobalConstants.stockInfoURL + ticker + '/quote' , function(error, response, body) {
-            //Check for error
-            if (error) {
-                return callback(error);
-            }
-            //Check for success status code
-            if (response.statusCode !== SuccessStatusCode) {
-                return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
-            }
-            try
-            {
-                //groom data
-                var ungroomedData = JSON.parse(body);
-
-                getStockNews(ticker, function(error, results) {
-                    if (error) {
-                        return callback(error);
-                    }
-                    const stockDetail = new StockDetail(ungroomedData["symbol"],
-                        ungroomedData["companyName"].substring(0,GlobalConstants.maxStockDescriptionLength),
-                        ungroomedData["primaryExchange"],
-                        ungroomedData["sector"],
-                        ungroomedData["week52High"],
-                        ungroomedData["week52Low"],
-                        ungroomedData["latestPrice"],
-                        ungroomedData["previousClose"],
-                        results)
-    
-                    callback(null,stockDetail);
-                });
-            }
-            catch (err)
-            {
-                return callback(err);
-            }
-        })
-    },
-
-    getSuggestedStocks : function (searchString, callback) {
+    getSuggestedStocks(searchString, callback) {
         request(GlobalConstants.suggestedStockURL + searchString + '&tags=XNYS,XNAS', function(error, response, body) {
             //Check for error
             if (error) {
@@ -136,9 +176,9 @@ module.exports = {
                 return callback(err);
             }
         })
-    },
+    }
 
-    getPreviousCloseStockValue : function (ticker, callback) {
+    getPreviousCloseStockValue(ticker, callback) {
         request(GlobalConstants.stockInfoURL + 'market/batch?symbols=' + ticker +'&types=quote&range=1m', function(error, response, body) {
             //Check for error
             if (error) {
@@ -164,32 +204,6 @@ module.exports = {
             }
         })
     }
-};
-
-function getStockNews(ticker, callback) {
-    request(GlobalConstants.stockInfoURL + ticker + '/news/last/' + GlobalConstants.maxNewsArcticles, function(error, response, body) {
-        //Check for error
-        if (error) {
-            return callback(error);
-        }
-        //Check for success status code
-        if (response.statusCode !== SuccessStatusCode) {
-            return callback(new Error('Invalid Status Code Returned:' + response.statusCode));
-        }
-        try
-        {
-            //groom data
-            var ungroomedData = JSON.parse(body);
-            var result = Object.keys(ungroomedData).map(function(key) {
-                return { headline: ungroomedData[key]["headline"], 
-                         url: ungroomedData[key]["url"],
-                         source: ungroomedData[key]["source"]}
-            });
-            callback(null,result);
-        }
-        catch (err)
-        {
-            return callback(err);
-        }
-    })
 }
+
+var self = module.exports = new StockService();

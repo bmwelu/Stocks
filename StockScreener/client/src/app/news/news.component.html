@@ -1,0 +1,14 @@
+<div class="widget-container" [hidden]="news.length === 0">
+    <div class="news">
+            <h3>Market News</h3>
+            <table class="table table-rounded news-table table-no-header">
+                <tbody>
+                    <tr *ngFor="let n of news">
+                        <td><a [href]="n.url" target="_blank" >{{n.headline}}</a></td>  
+                        <td>{{ n.source }}</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+</div>
+
