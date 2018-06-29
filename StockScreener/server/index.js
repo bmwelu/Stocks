@@ -18,5 +18,5 @@ app.use('/stocks', stocks);
 app.use('/sectors', sectors);
 
 app.listen(port, function(){
-	console.log('Server started on port ' + port);
+    console.log('Server started on port ' + port);
 });
