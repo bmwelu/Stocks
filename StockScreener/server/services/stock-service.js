@@ -149,27 +149,26 @@ class StockService {
     }
 
     getSuggestedStocks(searchString, callback) {
-        request(GlobalConstants.suggestedStockURL + searchString + '&tags=XNYS,XNAS', function(error, response, body) {
+        request({url: GlobalConstants.suggestedStockURL + searchString, headers: { "Authorization" : GlobalConstants.intrinioAuth }}, function(error, response, body) {
             //Check for error
             if (error) {
+                console.log(error)
                 return callback(error);              
             }
             //Check for success status code
             if (response.statusCode !== SuccessStatusCode) {
+                console.log(body)
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));           
             }
             try
             {
                 //groom data
-                var ungroomedData = JSON.parse(body)['Results'];
-                var groomedData = [];    
-                for(let i = 0; i < ungroomedData.length && i < SuggestStockReturnAmount; i++) {
-                    var clone = {};
-                    clone["symbol"] = ungroomedData[i]["Value"];
-                    clone["companyName"] = ungroomedData[i]["Text"].substring(0,GlobalConstants.maxStockDescriptionLength);
-                    groomedData.push(clone);
-                }
-                callback(null,groomedData);
+                var ungroomedData = JSON.parse(body)['data'];  
+                var result = Object.keys(ungroomedData).map(function(key) {
+                    return { symbol: ungroomedData[key]["ticker"], 
+                             companyName: ungroomedData[key]["name"].substring(0,GlobalConstants.maxStockDescriptionLength)}
+                });
+                callback(null,result.filter(obj => obj["symbol"] !== null).slice(0,SuggestStockReturnAmount));
             }
             catch (err)
             {
