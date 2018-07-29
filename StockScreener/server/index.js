@@ -8,7 +8,11 @@ const DefaultPort = 8080;
 var port = process.env.PORT || DefaultPort;
 
 // Add headers
-app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 app.use('/', stocks);
 app.use('/stocks', stocks);
