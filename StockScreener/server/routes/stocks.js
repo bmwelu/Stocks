@@ -38,7 +38,7 @@ router.get('/stocks/suggested-stocks/:searchString', function(req, res){
         if (error) {
             res.status(500).send({ error: 'Failure retrieving ' + searchString + ' suggested stocks.' })
         }
-        res.send(results.json());  
+        res.send(results);  
     });
 });
 
