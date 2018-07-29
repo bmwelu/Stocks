@@ -16,7 +16,6 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   public searchString = '';
   public suggestedStocks: Stock[] = [];
   public selectedSuggestedStock: Stock | undefined;
-  public emptySuggestions = true;
   private updateStocksTimeInSeconds = 30;
   private secondsRemainingUntilNextPriceUpdate = 0;
 
@@ -29,7 +28,6 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
 
   public ngOnInit(): void {
-     this.emptySuggestions = true;
      this.suggestedStocks = [];
      this.clockService.getClock()
          .takeUntil(this.destroyed)
@@ -89,24 +87,27 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   }
 
   public getSuggestedStocks(searchString: string): void {
-    this.suggestedStocks = [];
-    this.emptySuggestions = (this.suggestedStocks.length === 0);
+    this.cleanupSearch(searchString);
     if (typeof searchString !== 'undefined' && searchString) {
       this.stockMonitorService.getSuggestedStocks(searchString).subscribe((suggestedStocks) => {
           this.suggestedStocks = suggestedStocks;
-          this.emptySuggestions = (this.suggestedStocks.length === 0);
       });
+    } else {
+        this.suggestedStocks = [];
     }
   }
 
-  public suggestedStockSelected(stock: Stock): void {
-    this.searchString = (stock) ? stock.symbol + ': ' + stock.companyName : '';
-    this.selectedSuggestedStock = stock;
-    this.emptySuggestions = true;
+  public suggestedStockSelected(stock?: Stock): void {
+      if (stock) {
+        this.searchString = stock.symbol + ': ' + stock.companyName;
+        this.selectedSuggestedStock = stock;
+        this.suggestedStocks = [];
+      }
   }
 
-  private cleanupSearch(): void {
+  private cleanupSearch(searchString?: string): void {
     this.selectedSuggestedStock = undefined;
-    this.searchString = '';
+    this.searchString = searchString ? searchString : '';
+    this.suggestedStocks = [];
   }
 }

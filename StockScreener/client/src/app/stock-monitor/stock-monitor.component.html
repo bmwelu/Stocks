@@ -9,13 +9,13 @@
                     [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
                 </a>
             </h3>
-            <div class="search-bar">
+            <div class="search-bar" >
                 <input type="text" placeholder="Enter a company name or ticker to add" [(ngModel)]="searchString" 
-                (ngModelChange)="getSuggestedStocks(searchString)" maxlength="35"/>
+                (ngModelChange)="getSuggestedStocks(searchString)" maxlength="35" />
                 <a (click)="addStock()"><img src="/assets/plus.ico" height="20" width="20"/></a>
             </div>
             <div style="height:115px">
-                <ol class="suggested-stocks" [hidden]="emptySuggestions">
+                <ol class="suggested-stocks" *ngIf="suggestedStocks && suggestedStocks.length > 0">
                     <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
                 </ol>
             </div>

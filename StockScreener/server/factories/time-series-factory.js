@@ -6,23 +6,19 @@ const TimeSeriesFiveYears = require('../models/time-series-fiveyears')
 const IntradayInterval = 0;
 const DailyInterval = 1;
 const WeeklyInterval = 2;
-const MontlyInterval = 3;
 
-function TimeSeriesFactory () { }
-
-TimeSeriesFactory.prototype.createTimeSeries = function (interval, ticker) {
-    var timeSeries;
-    var intParsed = parseInt(interval);
-    if (intParsed === IntradayInterval) {
-         timeSeries = new TimeSeriesOneDay();
-    } else if (intParsed === DailyInterval) {
-        timeSeries = new TimeSeriesOneMonth();
-    } else if (intParsed === WeeklyInterval) {
-        timeSeries = new TimeSeriesOneYear();
-    } else if (intParsed === MontlyInterval) {
-        timeSeries = new TimeSeriesFiveYears();
+class TimeSeriesFactory { 
+    createTimeSeries(interval, ticker) {
+        var intParsed = parseInt(interval);
+        if (intParsed === IntradayInterval) {
+             return new TimeSeriesOneDay(ticker);
+        } else if (intParsed === DailyInterval) {
+            return new TimeSeriesOneMonth(ticker);
+        } else if (intParsed === WeeklyInterval) {
+            return new TimeSeriesOneYear(ticker);
+        }
+        return  new TimeSeriesFiveYears(ticker);
     }
-    return timeSeries;
 }
 
 module.exports = TimeSeriesFactory

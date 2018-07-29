@@ -127,7 +127,7 @@ class StockService {
         }
         const timeSeriesFactory = new TimeSeriesFactory();
         const timeSeries = timeSeriesFactory.createTimeSeries(interval, ticker);
-        request(GlobalConstants.stockInfoURL + ticker + '/chart/' + timeSeries.requestURL, function(error, response, body) {          
+        request(GlobalConstants.stockInfoURL + ticker + '/chart/' + timeSeries.timeSlice + '?changeFromClose=true', function(error, response, body) {          
             //Check for error
             if (error) {
                 return callback(error);
