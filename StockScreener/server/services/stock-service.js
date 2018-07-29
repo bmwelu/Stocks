@@ -152,12 +152,10 @@ class StockService {
         request({url: GlobalConstants.suggestedStockURL + searchString, headers: { "Authorization" : GlobalConstants.intrinioAuth }}, function(error, response, body) {
             //Check for error
             if (error) {
-                console.log(error)
                 return callback(error);              
             }
             //Check for success status code
             if (response.statusCode !== SuccessStatusCode) {
-                console.log(body)
                 return callback(new Error('Invalid Status Code Returned:' + response.statusCode));           
             }
             try

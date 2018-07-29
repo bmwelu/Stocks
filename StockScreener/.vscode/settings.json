@@ -1,5 +1,7 @@
 {
     "appService.zipIgnorePattern": [
         "node_modules{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/27fd5b15-db00-4b87-bd03-8e77c0aa1079/resourceGroups/bmwelu/providers/Microsoft.Web/sites/bmwelu",
+    "appService.deploySubpath": "client\\dist"
 }
