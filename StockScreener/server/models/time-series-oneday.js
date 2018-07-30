@@ -33,8 +33,12 @@ class TimeSeriesOneDay extends TimeSeriesBase {
                     obj[ungroomedData[i]["minute"]] = ungroomedData[i]["average"];
                     groomedData.push(obj);
                 }
-            }                     
-            return groomedData;
+            }    
+            //By the minute produces some funky charts, every two minutes is fine for now       
+            return groomedData.filter(function(value, index, Arr) {
+                return index % 2 == 0;
+            });
+            //return groomedData;
         }
       }
     
