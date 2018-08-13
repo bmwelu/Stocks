@@ -36,6 +36,7 @@ export class ChartComponent implements OnInit {
       this.lineChartColors = [{}, {}];
       this.showChart = false;
     } else {
+      const lastChartValue = chartData.filter(x => x).pop();
       // Should't have to do this.  Bug in ng2-charts where it doesnt update x axis
       setTimeout(() => {
         if (chartLabels[0] === 'previousClose') {
@@ -47,7 +48,8 @@ export class ChartComponent implements OnInit {
             this.lineChartColors = [
                 {
                   backgroundColor: 'transparent',
-                  borderColor: chartData[chartData.length - 1] - chartData[0] > 0 ? 'rgb(66, 244, 69)' : 'rgb(244, 65, 65)'
+                  borderColor: (lastChartValue === undefined) ? 0 : lastChartValue - chartData[0] > 0 ?
+                  'rgb(66, 244, 69)' : 'rgb(244, 65, 65)'
                 },
                 {
                     backgroundColor: 'transparent',
@@ -61,7 +63,8 @@ export class ChartComponent implements OnInit {
             this.lineChartColors = [
                 {
                   backgroundColor: 'transparent',
-                  borderColor: chartData[chartData.length - 1] - chartData[0] > 0 ? 'rgb(66, 244, 69)' : 'rgb(244, 65, 65)'
+                  borderColor: (lastChartValue === undefined) ? 0 : lastChartValue - chartData[0] > 0 ?
+                  'rgb(66, 244, 69)' : 'rgb(244, 65, 65)'
                 }, {}
             ];
         }}, 0);

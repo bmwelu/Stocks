@@ -162,7 +162,11 @@ class StockService {
             try
             {
                 //groom data
-                var ungroomedData = JSON.parse(body)['data'];  
+                var ungroomedData = JSON.parse(body)['data'];
+                //The free API returns a lot of noise and securities that seem to be stale
+                ungroomedData = ungroomedData.filter(function( obj ) {
+                    return obj.security_type !== null && obj.market_sector !== null && obj.stock_exchange !== null;
+                });  
                 var result = Object.keys(ungroomedData).map(function(key) {
                     return { symbol: ungroomedData[key]["ticker"], 
                              companyName: ungroomedData[key]["name"].substring(0,GlobalConstants.maxStockDescriptionLength)}

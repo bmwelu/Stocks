@@ -1,4 +1,5 @@
-const TimeSeriesBase = require('./time-series-base')
+const TimeSeriesBase = require('./time-series-base');
+const DailyStartTime = '9:30'
 
 class TimeSeriesOneDay extends TimeSeriesBase {
     constructor(ticker) {
@@ -9,55 +10,59 @@ class TimeSeriesOneDay extends TimeSeriesBase {
         var ungroomedData = Object.keys(JSON.parse(body)).map(key => {
             return JSON.parse(body)[key];
         });
-        var groomedData = [];
+        var groomedData = [];     
         if (ungroomedData !== undefined && ungroomedData.length !== 0)
         {
             var firstTradingTimeDurationIndex = this.findFirstTradingTimeDuration(ungroomedData);
-            groomedData.push(this.calculatePreviousClose(ungroomedData[firstTradingTimeDurationIndex]));
-            for(let i = 0; i < ungroomedData.length; i++)
-            {
-                var obj = {};
-                //sometimes stocks aren't traded at all during a 15 minute duration, get previous average if so
-                if(ungroomedData[i]["average"] === -1)
-                {
-                    //if first daily increment, take previous close
-                    if(i === 0)
+            //There hasn't been anything traded so far today
+            if(firstTradingTimeDurationIndex === -1) {
+                return groomedData;
+            }
+            //Add previous close
+            groomedData.push(this.calculatePreviousClose(ungroomedData[firstTradingTimeDurationIndex]));  
+
+            var oneDayStartTime = new Date('2000-11-11T08:30:00');
+            const minutesInOneDayTradingSession = 480;
+            var previousAverage;
+            for(let i = 1; i <= minutesInOneDayTradingSession + 1; i++) {
+                var oneMinute = {};
+                if(i <= ungroomedData.length) {
+                    //sometimes stocks aren't traded at all during a minute duration, get previous average if so
+                    if(ungroomedData[i-1]["average"] === -1)
                     {
-                        obj[ungroomedData[i]["minute"]] = groomedData[0]['previousClose'];
-                        groomedData.push(obj);
+                        oneMinute[oneDayStartTime.toTimeString()] = previousAverage;
                     } else {
-                        obj[ungroomedData[i]["minute"]] = Object.values(groomedData[i-1])[0];
-                        groomedData.push(obj);
+                        oneMinute[oneDayStartTime.toTimeString()] = ungroomedData[i-1]["average"];
+                        previousAverage = ungroomedData[i-1]["average"];
                     }
                 } else {
-                    obj[ungroomedData[i]["minute"]] = ungroomedData[i]["average"];
-                    groomedData.push(obj);
+                    oneMinute[oneDayStartTime.toTimeString()] = null;
                 }
-            }    
+                groomedData.push(oneMinute);
+                oneDayStartTime.setMinutes(oneDayStartTime.getMinutes() + 1);            
+            } 
             //By the minute produces some funky charts, every two minutes is fine for now       
             return groomedData.filter(function(value, index, Arr) {
-                return index % 2 == 0;
+                return index % 5 == 0;
             });
-            //return groomedData;
         }
-      }
+        return groomedData;
+    }
     
-      //Current data doesn't set the first point the previous close.  If there is aftermarket trading, graphs won't
-      //display % change correctly.
-      calculatePreviousClose(firstDailyEntry) {
-          return {
-              previousClose: parseFloat(firstDailyEntry["average"]) * (1 - parseFloat(firstDailyEntry["changeOverTime"]))
-          };
-      }
+    //Current data doesn't set the first point the previous close.  If there is aftermarket trading, graphs won't
+    //display % change correctly.
+    calculatePreviousClose(firstDailyEntry) {
+        return {
+            previousClose: parseFloat(firstDailyEntry["average"]) * (1 - parseFloat(firstDailyEntry["changeOverTime"]))
+        };
+    }
     
       //Sometimes stocks don't trade right away, so averages will be -1.  Find the first entry that has an average
-      findFirstTradingTimeDuration(timeData) {
+    findFirstTradingTimeDuration(timeData) {
         for(let i = 0; i < timeData.length; i++)
         {
             if(timeData[i]["average"] !== -1)
-            {
                 return i;
-            }
         }
         return -1;
     }
