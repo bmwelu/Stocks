@@ -4,6 +4,7 @@ const request = require('request');
 const TimeSeriesFactory = require('../factories/time-series-factory');
 const StockDetail = require('../models/stock-detail');
 const GlobalConstants = require('../models/global-constants');
+var StockSymbolLookup = require('stock-symbol-lookup');
 const SuccessStatusCode = 200;
 const IntradayInterval = 0;
 const MontlyInterval = 3;
@@ -150,35 +151,25 @@ class StockService {
     }
 
     getSuggestedStocks(searchString, callback) {
-        request({url: GlobalConstants.suggestedStockURL + searchString, headers: { "Authorization" : GlobalConstants.intrinioAuth }}, function(error, response, body) {
-            //Check for error
-            if (error) {
-                return callback(error);              
-            }
-            //Check for success status code
-            if (response.statusCode !== SuccessStatusCode) {
-                return callback(new Error('Invalid Status Code Returned:' + response.statusCode));           
-            }
-            try
-            {
-                //groom data
-                var ungroomedData = JSON.parse(body)['data'];
-                //The free API returns a lot of noise and securities that seem to be stale
-                ungroomedData = ungroomedData.filter(function( obj ) {
-                    return obj.security_type !== null && obj.market_sector !== null && obj.stock_exchange !== null;
-                });  
-                var result = Object.keys(ungroomedData).map(function(key) {
-                    return { symbol: ungroomedData[key]["ticker"], 
-                             companyName: ungroomedData[key]["name"].substring(0,GlobalConstants.maxStockDescriptionLength)}
+        try
+        {
+            StockSymbolLookup.loadData()
+            .then((data) => {
+                StockSymbolLookup.searchBySymbol(searchString, 5)
+                .then((data) => {
+                    var result = Object.keys(data).map(function(key) {
+                        return { symbol: data[key]["symbol"], 
+                                 companyName: data[key]["securityName"].substring(0,GlobalConstants.maxStockDescriptionLength)}
+                    });
+                   callback(null,result.filter(obj => obj["symbol"] !== null).slice(0,SuggestStockReturnAmount));
                 });
-                callback(null,result.filter(obj => obj["symbol"] !== null).slice(0,SuggestStockReturnAmount));
-            }
-            catch (err)
-            {
-                return callback(err);
-            }
-        })
-    }
+            });
+        }
+        catch (err)
+        {
+            return callback(err);
+        }
+    };
 
     getPreviousCloseStockValue(ticker, callback) {
         request(GlobalConstants.stockInfoURL + 'market/batch?symbols=' + ticker +'&types=quote&range=1m', function(error, response, body) {

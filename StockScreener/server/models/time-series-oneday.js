@@ -1,5 +1,4 @@
 const TimeSeriesBase = require('./time-series-base');
-const DailyStartTime = '9:30'
 
 class TimeSeriesOneDay extends TimeSeriesBase {
     constructor(ticker) {
@@ -22,7 +21,7 @@ class TimeSeriesOneDay extends TimeSeriesBase {
             groomedData.push(this.calculatePreviousClose(ungroomedData[firstTradingTimeDurationIndex]));  
 
             var oneDayStartTime = new Date('2000-11-11T08:30:00');
-            const minutesInOneDayTradingSession = 480;
+            const minutesInOneDayTradingSession = 390;
             var previousAverage;
             for(let i = 1; i <= minutesInOneDayTradingSession + 1; i++) {
                 var oneMinute = {};
@@ -30,13 +29,13 @@ class TimeSeriesOneDay extends TimeSeriesBase {
                     //sometimes stocks aren't traded at all during a minute duration, get previous average if so
                     if(ungroomedData[i-1]["average"] === -1)
                     {
-                        oneMinute[oneDayStartTime.toTimeString()] = previousAverage;
+                        oneMinute[oneDayStartTime.toTimeString().split(' ')[0]] = previousAverage;
                     } else {
-                        oneMinute[oneDayStartTime.toTimeString()] = ungroomedData[i-1]["average"];
+                        oneMinute[oneDayStartTime.toTimeString().split(' ')[0]] = ungroomedData[i-1]["average"];
                         previousAverage = ungroomedData[i-1]["average"];
                     }
                 } else {
-                    oneMinute[oneDayStartTime.toTimeString()] = null;
+                    oneMinute[oneDayStartTime.toTimeString().split(' ')[0]] = null;
                 }
                 groomedData.push(oneMinute);
                 oneDayStartTime.setMinutes(oneDayStartTime.getMinutes() + 1);            
