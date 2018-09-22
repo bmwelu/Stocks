@@ -2,5 +2,6 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}"
     ],
-    "appService.deploySubpath": "server"
+    "appService.deploySubpath": "server",
+    "appService.defaultWebAppToDeploy": "/subscriptions/1b40c59d-fbd2-4e3a-93b5-375af147b033/resourceGroups/bwelu-server/providers/Microsoft.Web/sites/bwelu-server"
 }

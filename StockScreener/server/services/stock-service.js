@@ -153,16 +153,13 @@ class StockService {
     getSuggestedStocks(searchString, callback) {
         try
         {
-            StockSymbolLookup.loadData()
+            StockSymbolLookup.searchBySymbol(searchString, 5)
             .then((data) => {
-                StockSymbolLookup.searchBySymbol(searchString, 5)
-                .then((data) => {
-                    var result = Object.keys(data).map(function(key) {
-                        return { symbol: data[key]["symbol"], 
-                                 companyName: data[key]["securityName"].substring(0,GlobalConstants.maxStockDescriptionLength)}
-                    });
-                   callback(null,result.filter(obj => obj["symbol"] !== null).slice(0,SuggestStockReturnAmount));
+                var result = Object.keys(data).map(function(key) {
+                    return { symbol: data[key]["symbol"], 
+                             companyName: data[key]["securityName"].substring(0,GlobalConstants.maxStockDescriptionLength)}
                 });
+                callback(null,result.filter(obj => obj["symbol"] !== null).slice(0,SuggestStockReturnAmount));
             });
         }
         catch (err)

@@ -3,8 +3,12 @@ var stocks = require('./routes/stocks');
 var sectors = require('./routes/sectors');
 var app = express();
 const DefaultPort = 8080;
+var StockSymbolLookup = require('stock-symbol-lookup');
 
 var port = process.env.PORT || DefaultPort;
+
+//Load stock lookup list at start
+StockSymbolLookup.loadData();
 
 // Add headers
 // Add headers
