@@ -25,6 +25,7 @@
     "angular-ntf": "^1.0.0",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.7.2",
+    "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.7",
     "ng2-charts": "^1.6.0",
     "ng2-notify-popup": "^0.1.25",
