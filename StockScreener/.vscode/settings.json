@@ -2,5 +2,5 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}"
     ],
-    "appService.deploySubpath": "server"
+    "appService.deploySubpath": "client\\dist"
 }

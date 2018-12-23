@@ -13,6 +13,7 @@ export class NewsComponent extends SubscriberEntity implements OnInit  {
   public news: News[] = [];
   private updateNewsTimeInSeconds = 30;
   private secondsRemainingUntilNextUpdate = 0;
+  public displayedColumns = ['headline', 'source'];
   constructor(
     private clockService: ClockService,
     private newsMonitorService: NewsMonitorService) {

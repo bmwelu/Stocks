@@ -13,6 +13,7 @@ export class SectorsComponent extends SubscriberEntity implements OnInit  {
   public sectors: Sector[] = [];
   private updateSectorsTimeInSeconds = 30;
   private secondsRemainingUntilNextUpdate = 0;
+  public displayedColumns = ['sectorName', 'percentChange'];
   constructor(
     private clockService: ClockService,
     private sectorMonitorService: SectorMonitorService) {

@@ -1,14 +1,23 @@
-<div class="widget-container" [hidden]="news.length === 0">
-    <div class="news">
-            <h3>Market News</h3>
-            <table class="table table-rounded news-table table-no-header">
-                <tbody>
-                    <tr *ngFor="let n of news">
-                        <td><a [href]="n.url" target="_blank" >{{n.headline}}</a></td>  
-                        <td>{{ n.source }}</td>
-                    </tr>
-                </tbody>
-            </table>
-    </div>
-</div>
-
+<mat-card class="news-card" [hidden]="news.length === 0">
+    <mat-card-header>
+        <mat-card-title> Market News </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+            <div class="mat-elevation-z8">
+                    <!-- <table class="table table-rounded stock-table" [hidden]="stocks.length === 0"> -->
+                    <mat-table [dataSource]="news" [hidden]="news.length === 0">
+                    <!-- Sector Name Column -->
+                    <ng-container matColumnDef="headline">
+                       <mat-header-cell *matHeaderCellDef> Headline </mat-header-cell>
+                       <mat-cell *matCellDef="let element"><a [href]="element.url" target="_blank" >{{element.headline}}</a></mat-cell>
+                    </ng-container>
+                    <!-- Percent Change Column -->
+                    <ng-container matColumnDef="source">
+                       <mat-header-cell *matHeaderCellDef> Source </mat-header-cell>
+                       <mat-cell *matCellDef="let element"> {{element.source}} </mat-cell>
+                    </ng-container>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+            </div>
+    </mat-card-content>
+</mat-card>

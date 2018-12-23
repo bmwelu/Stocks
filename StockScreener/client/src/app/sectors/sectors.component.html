@@ -1,20 +1,25 @@
-<div class="widget-container" [hidden]="sectors.length === 0">
-    <div class="sectors">
-            <h3>Real-Time Sector Performance</h3>
-            <table class="table table-rounded sector-table">
-                <thead>
-                    <tr>
-                        <th> Sector Name </th>
-                        <th> Percent Change </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let sector of sectors">
-                        <td>{{ sector.sectorName }}</td>
-                        <td [style.color]="sector.percentChange.charAt(0) === '-' ? 'red' : 'green'">{{ sector.percentChange }}</td>
-                    </tr>
-                </tbody>
-            </table>
-    </div>
-</div>
+<mat-card class="sectors-card" [hidden]="sectors.length === 0">
+        <mat-card-header>
+            <mat-card-title> Real-Time Sector Performance </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+                <div class="mat-elevation-z8">
+                        <!-- <table class="table table-rounded stock-table" [hidden]="stocks.length === 0"> -->
+                        <mat-table [dataSource]="sectors" [hidden]="sectors.length === 0">
+                        <!-- Sector Name Column -->
+                        <ng-container matColumnDef="sectorName">
+                           <mat-header-cell *matHeaderCellDef> Sector Name </mat-header-cell>
+                           <mat-cell *matCellDef="let element"> {{element.sectorName}} </mat-cell>
+                        </ng-container>
+                        <!-- Percent Change Column -->
+                        <ng-container matColumnDef="percentChange">
+                           <mat-header-cell *matHeaderCellDef> Percent Change </mat-header-cell>
+                           <mat-cell *matCellDef="let element" [style.color]="(element.percentChange && element.percentChange.charAt(0)) === '-' ? 'red' : 'green'"> {{element.percentChange}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                     </div>
+        </mat-card-content>
+    </mat-card>
 

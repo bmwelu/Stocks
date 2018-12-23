@@ -1,14 +1,16 @@
-<div class="widget-container">
-        <div class="most-active">
-            <h3>Stock Screener              
+<mat-card class="screener-card">
+        <mat-card-header>
+            <mat-card-title> Stock Screener 
                 <a class="glyphicon glyphicon-question-sign" 
-                    id="info" title="Stock Hours" 
-                    popover="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  
-                    Data will not refresh outside of these hours. Only stocks traded on NYSE and NASDAQ 
-                    can currently be added."
-                    [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
+                id="info" title="Stock Hours" 
+                popover="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  
+                Data will not refresh outside of these hours. Only stocks traded on NYSE and NASDAQ 
+                can currently be added."
+                [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
                 </a>
-            </h3>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
             <div class="search-bar" >
                 <input type="text" placeholder="Search by symbol" [(ngModel)]="searchString" 
                 (ngModelChange)="getSuggestedStocks(searchString)" maxlength="35" />
@@ -19,26 +21,38 @@
                     <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
                 </ol>
             </div>
-            <table class="table table-rounded stock-table" [hidden]="stocks.length === 0">
-                <thead>
-                    <tr>
-                        <th> Company Name </th>
-                        <th> Symbol </th>
-                        <th> Latest Price </th>
-                        <th> Percent Change </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let x of stocks">
-                        <td>{{ x.companyName }}</td>
-                        <td><a (click)="getTickerInfo(x.symbol)" style="cursor: pointer">{{ x.symbol }}</a></td>
-                        <td>{{ x.latestPrice | currency}}</td>
-                        <td [style.color]="(x.percentChange && x.percentChange.charAt(0)) === '-' ? 'red' : 'green'">{{ x.percentChange }}</td>
-                        <td><a (click)="deleteStock(x.symbol)"><img src="/assets/delete.ico" height="20" width="20"/></a></td>            
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <app-stock-detail></app-stock-detail>
-</div>
+            <div class="mat-elevation-z8">
+                <!-- <table class="table table-rounded stock-table" [hidden]="stocks.length === 0"> -->
+                <mat-table [dataSource]="stocks" [hidden]="stocks.length === 0">
+                <!-- Company Name Column -->
+                <ng-container matColumnDef="companyName">
+                    <mat-header-cell *matHeaderCellDef> Company Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.companyName}} </mat-cell>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="symbol">
+                    <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a (click)="getTickerInfo(element.symbol)" style="cursor: pointer">{{element.symbol}}</a> </mat-cell>
+                </ng-container>
+                <!-- Latest Price Column -->
+                <ng-container matColumnDef="latestPrice">
+                    <mat-header-cell *matHeaderCellDef> Latest Price </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.latestPrice | currency}} </mat-cell>
+                </ng-container>
+                <!-- Percent Change Column -->
+                <ng-container matColumnDef="percentChange">
+                    <mat-header-cell *matHeaderCellDef> Percent Change </mat-header-cell>
+                    <mat-cell *matCellDef="let element" [style.color]="(element.percentChange && element.percentChange.charAt(0)) === '-' ? 'red' : 'green'"> {{element.percentChange}} </mat-cell>
+                </ng-container>
+                <!-- Delete Stock Column -->
+                <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a (click)="deleteStock(element.symbol)"><img src="/assets/delete.ico" height="20" width="20"/></a> </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+            </div>
+            <app-stock-detail></app-stock-detail>
+        </mat-card-content>
+    </mat-card>

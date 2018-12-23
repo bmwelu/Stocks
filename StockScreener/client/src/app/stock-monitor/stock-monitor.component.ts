@@ -18,6 +18,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   public selectedSuggestedStock: Stock | undefined;
   private updateStocksTimeInSeconds = 30;
   private secondsRemainingUntilNextPriceUpdate = 0;
+  public displayedColumns = ['companyName', 'symbol', 'latestPrice', 'percentChange', 'delete'];
 
   constructor(
     private clockService: ClockService,

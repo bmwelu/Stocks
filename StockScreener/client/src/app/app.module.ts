@@ -28,6 +28,11 @@ import { ToastOptions } from 'ng2-toastr';
 import { AppComponent } from './app.component';
 import { ChartComponent } from './_shared/chart/chart.component';
 
+// Angular Materials
+import {MatTableModule} from '@angular/material/table';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material';
+
 
 @NgModule({
   declarations: [
@@ -46,7 +51,10 @@ import { ChartComponent } from './_shared/chart/chart.component';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    MatTableModule,
+    MatGridListModule,
+    MatCardModule
   ],
   providers: [{provide: ToastOptions, useClass: CustomToastOptions},
      ClockService, StockMonitorService, StockComponentSharedService, SectorMonitorService, NewsMonitorService],

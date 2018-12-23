@@ -22,6 +22,8 @@
     "@angular/platform-browser": "^5.2.11",
     "@angular/platform-browser-dynamic": "^5.2.11",
     "@angular/router": "^5.2.11",
+    "@angular/material": "^5.2.4",
+    "@angular/cdk": "^5.2.4",
     "angular-ntf": "^1.0.0",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.7.2",
