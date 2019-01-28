@@ -16,11 +16,18 @@ body{
 .mat-column-select {
     overflow: initial;
 }
-
+.mat-column-delete {
+    flex: 0 0 30px !important;
+    width: 30px !important;
+}
+.mat-column-companyName {
+    flex: 0 0 40% !important;
+    width: 40% !important;
+}
 .app {
     margin: 10px;
 }
-.mat-card {
+.mat-card-main {
     background: none;
     margin: 30px;
     float: left;
@@ -121,13 +128,8 @@ body{
 }
 
 .stock-detail {
-	background-color: white;
-    position: absolute;
+    position: absolute !important;
     top: 10%;
-	padding: 2px;
-	border-radius: @border-radius;
-	border: solid #000;
-    border-width: 2px;
     font-family: @font-family;
     z-index: 2;
     .stock-detail-info {
@@ -164,9 +166,7 @@ body{
 }
 
 .detail-exit-button {
-	position: absolute;
-    top: 5px;
-    right: 10px;
+	float: right;
 }
 
 .table-stock-news { 

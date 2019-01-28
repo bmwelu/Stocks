@@ -1,4 +1,4 @@
-<mat-card class="screener-card">
+<mat-card class="screener-card mat-card-main mat-elevation-z24">
         <mat-card-header>
             <mat-card-title> Stock Screener 
                 <a class="glyphicon glyphicon-question-sign" 
@@ -21,9 +21,8 @@
                     <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
                 </ol>
             </div>
-            <div class="mat-elevation-z8">
-                <!-- <table class="table table-rounded stock-table" [hidden]="stocks.length === 0"> -->
-                <mat-table [dataSource]="stocks" [hidden]="stocks.length === 0">
+            <div class="mat-elevation-z8" [hidden]="stocks.length === 0">
+                <mat-table [dataSource]="stocks">
                 <!-- Company Name Column -->
                 <ng-container matColumnDef="companyName">
                     <mat-header-cell *matHeaderCellDef> Company Name </mat-header-cell>
@@ -46,8 +45,8 @@
                 </ng-container>
                 <!-- Delete Stock Column -->
                 <ng-container matColumnDef="delete">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a (click)="deleteStock(element.symbol)"><img src="/assets/delete.ico" height="20" width="20"/></a> </mat-cell>
+                    <mat-header-cell fxFlex="30px" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell fxFlex="30px" *matCellDef="let element"> <a (click)="deleteStock(element.symbol)"><img src="/assets/delete.ico" height="20" width="20"/></a> </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

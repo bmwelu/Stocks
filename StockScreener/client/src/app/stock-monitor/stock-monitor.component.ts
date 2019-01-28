@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ClockService } from '../_shared/clock.service';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -68,7 +68,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     if (this.selectedSuggestedStock) {
       const symbolToAdd = (this.selectedSuggestedStock) ? this.selectedSuggestedStock.symbol : null;
       if (this.stocks.filter((stock) => stock.symbol === symbolToAdd).length === 0) {
-        this.stocks.push(this.selectedSuggestedStock);
+        this.stocks = this.stocks.concat([this.selectedSuggestedStock]);
         this.updateStocks([this.selectedSuggestedStock]);
         this.stockComponentSharedService.setCachedStockList(this.stocks);
         this.toastr.success('Stock was added to list below.', 'Success!');

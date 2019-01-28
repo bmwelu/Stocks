@@ -32,6 +32,7 @@ import { ChartComponent } from './_shared/chart/chart.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material';
+import {MatListModule} from '@angular/material/list';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { MatCardModule } from '@angular/material';
     ChartsModule,
     MatTableModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatListModule
   ],
   providers: [{provide: ToastOptions, useClass: CustomToastOptions},
      ClockService, StockMonitorService, StockComponentSharedService, SectorMonitorService, NewsMonitorService],

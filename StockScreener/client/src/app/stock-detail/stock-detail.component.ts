@@ -1,6 +1,5 @@
 import { Component, OnInit} from '@angular/core';
 import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
-import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ChartComponent } from '../_shared/chart/chart.component';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import { Stock } from '../_shared/models/stock';
@@ -21,8 +20,7 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
   public weeklyChartAvailable = false;
   public monthlyChartAvailable = false;
   constructor(
-    private stockComponentSharedService: StockComponentSharedService,
-    private stockMonitorService: StockMonitorService) {
+    private stockComponentSharedService: StockComponentSharedService) {
       super();
       this.chart = new ChartComponent();
       stockComponentSharedService.tickerStream
