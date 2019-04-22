@@ -9,22 +9,18 @@ export class StockMonitorService {
     constructor(private httpClient: HttpClient) { }
 
     public getStocks(stocks: string[]): Observable<Stock[]> {
-        return this.httpClient.get<Stock[]>(`${environment.apiURL}stocks/${stocks}`);
+        return this.httpClient.get<Stock[]>(`${environment.apiURL}api/stockquote/?tickers=${stocks}`);
     }
 
     public getStockDetail(ticker: string): Observable<Stock> {
-        return this.httpClient.get<Stock>(`${environment.apiURL}stocks/${ticker}/detail`);
+        return this.httpClient.get<Stock>(`${environment.apiURL}api/stock/${ticker}/detail`);
     }
 
     public getStockTimeSeriesData(ticker: string, interval: number): Observable<any> {
-        return this.httpClient.get<any>(`${environment.apiURL}stocks/${ticker}/timeseries-data/${interval}`);
-    }
-
-    public getMonitoredStocks(): Observable<Stock[]> {
-        return this.httpClient.get<Stock[]>(`${environment.apiURL}stocks/watchlist/`);
+        return this.httpClient.get<any>(`${environment.apiURL}api/stock/${ticker}/timeseries/${interval}`);
     }
 
     public getSuggestedStocks(searchString: string): Observable<Stock[]> {
-        return this.httpClient.get<Stock[]>(`${environment.apiURL}stocks/suggested-stocks/${searchString}`);
+        return this.httpClient.get<Stock[]>(`${environment.apiURL}api/suggestedstock/?searchString=${searchString}`);
     }
 }

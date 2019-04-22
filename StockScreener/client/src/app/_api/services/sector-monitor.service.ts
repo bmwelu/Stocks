@@ -9,6 +9,6 @@ export class SectorMonitorService {
     constructor(private httpClient: HttpClient) { }
 
     public getSectorInfo(): Observable<Sector[]> {
-        return this.httpClient.get<Sector[]>(`${environment.apiURL}sectors/`);
+        return this.httpClient.get<Sector[]>(`${environment.apiURL}api/sectors/`);
     }
 }

@@ -50,6 +50,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
       const stockSymbols = stocks.map((s) => s.symbol);
       const request = this.stockMonitorService.getStocks(stockSymbols);
       request.subscribe((returnedStocks) => {
+          console.log('in');
         for (const stock of returnedStocks) {
           const stockToUpdate = stocks.find((st) => st.symbol === stock.symbol);
           if (stockToUpdate !== undefined) {

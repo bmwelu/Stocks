@@ -54,8 +54,8 @@ export class StockComponentSharedService {
       const labels: String[] = [];
       const data: Number[] = [];
       for (let i = 0; i < chartData.length; i++) {
-         data.push(chartData[i][Object.keys(chartData[i])[0]]);
-         labels.push(Object.keys(chartData[i])[0]);
+         data.push(chartData[i]['value']);
+         labels.push(chartData[i]['time']);
       }
 
       localStorage.setItem(`${ticker}:${interval}:data`, JSON.stringify(data));

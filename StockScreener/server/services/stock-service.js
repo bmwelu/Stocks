@@ -131,7 +131,6 @@ class StockService {
         request(GlobalConstants.stockInfoURL + ticker + '/chart/' + timeSeries.timeSlice + '?changeFromClose=true', function(error, response, body) {          
             //Check for error
             if (error) {
-                console.log('1')
                 return callback(error);
             }
             //Check for success status code
