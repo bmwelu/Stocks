@@ -1,0 +1,73 @@
+.stock-detail {
+    position: absolute !important;
+    top: 10%;
+    font-family: Tahoma;
+    z-index: 2;
+    margin: 30px;
+    float: left;
+    padding: 10px !important;
+    text-align: center;
+}
+
+.stock-detail-info {
+    display: inline-block;
+}
+
+.stock-detail-info div {
+    float: left;
+}
+
+.stock-detail-info div table {
+    margin-right: 15px;
+    margin-left: 10px;
+}
+
+.stock-detail-info div table tr td {
+    padding-right: 15px;
+    text-align: left;
+    min-width: 125px;
+}
+
+.time-series-button {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background-color: #538fbe;
+    border: 1px solid #2d6898;
+    border-radius:10px;
+    padding-left: 4px;
+	padding-right: 4px;
+	margin-left: 2px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.detail-exit-button {
+	float: right;
+}
+
+.table-stock-news { 
+    font-family: Tahoma;
+    margin-right: 15px;
+    margin-left: 10px;
+    width: 100%;
+    max-width: 575px;
+    margin-bottom: 5px;
+}
+
+.table-stock-news thead th {
+    text-align: center;
+    font-weight: bold;
+}
+
+.table-stock-news tr {
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;                  
+}
+
+.table-stock-news tr td {
+    padding-right: 15px;
+    text-align: left;
+    min-width: 125px;
+    text-align: center;
+}

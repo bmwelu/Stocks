@@ -7,7 +7,8 @@ import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-stock-detail',
-  templateUrl: './stock-detail.component.html'
+  templateUrl: './stock-detail.component.html',
+  styleUrls: ['./stock-detail.component.css']
 })
 
 export class StockDetailComponent extends SubscriberEntity implements OnInit  {

@@ -1,0 +1,6 @@
+<div class="web-app-container app">
+    <p color="primary">
+        <button  *ngIf="auth.isLoggedIn()" (click)="auth.logout()" mat-button class="logout-button">Logout</button>
+    </p>
+    <router-outlet></router-outlet>
+</div>

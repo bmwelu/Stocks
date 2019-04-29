@@ -21,8 +21,7 @@
       "styles": [
         "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
-        "./styles/css/styles.min.css"
+        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClockService } from '../_shared/clock.service';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -9,7 +9,8 @@ import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-stock-monitor',
-  templateUrl: './stock-monitor.component.html'
+  templateUrl: './stock-monitor.component.html',
+  styleUrls: ['./stock-monitor.component.css']
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   public stocks: Stock[] = [];
@@ -50,7 +51,6 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
       const stockSymbols = stocks.map((s) => s.symbol);
       const request = this.stockMonitorService.getStocks(stockSymbols);
       request.subscribe((returnedStocks) => {
-          console.log('in');
         for (const stock of returnedStocks) {
           const stockToUpdate = stocks.find((st) => st.symbol === stock.symbol);
           if (stockToUpdate !== undefined) {

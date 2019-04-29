@@ -1,0 +1,9 @@
+.news-card {
+    background: none;
+    margin: 30px;
+    float: left;
+    padding: 10px !important;
+    text-align:center;
+    font-family: Tahoma;
+    max-width: 500px;
+}

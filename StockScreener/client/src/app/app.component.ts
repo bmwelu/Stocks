@@ -1,12 +1,11 @@
-import { Component, ViewContainerRef } from '@angular/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Component } from '@angular/core';
+import { AuthGuard } from './_api/services/auth-guard.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public toastr: ToastsManager, vRef: ViewContainerRef) {
-    this.toastr.setRootViewContainerRef(vRef);
-  }
+  constructor(public auth: AuthGuard) {}
 }

@@ -3,10 +3,12 @@ import { NewsMonitorService } from '../_api/services/news-monitor.service';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import { News } from '../_shared/models/news';
 import { ClockService } from '../_shared/clock.service';
+import { AuthGuard } from '../_api/services/auth-guard.service';
 
 @Component({
   selector: 'app-news',
-  templateUrl: './news.component.html'
+  templateUrl: './news.component.html',
+  styleUrls: ['./news.component.css']
 })
 
 export class NewsComponent extends SubscriberEntity implements OnInit  {
@@ -16,9 +18,9 @@ export class NewsComponent extends SubscriberEntity implements OnInit  {
   public displayedColumns = ['headline', 'source'];
   constructor(
     private clockService: ClockService,
-    private newsMonitorService: NewsMonitorService) {
+    private newsMonitorService: NewsMonitorService,
+    private auth: AuthGuard) {
       super();
-
    }
 
   public ngOnInit(): void {
@@ -36,6 +38,8 @@ export class NewsComponent extends SubscriberEntity implements OnInit  {
   }
 
   private updateNews(): void {
-    this.newsMonitorService.getNews().subscribe((news) => this.news = news);
+    if (this.auth.isLoggedIn()) {
+        this.newsMonitorService.getNews().subscribe((news) => this.news = news);
+    }
   }
 }

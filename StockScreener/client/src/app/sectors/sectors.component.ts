@@ -3,10 +3,12 @@ import { SectorMonitorService } from '../_api/services/sector-monitor.service';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import { Sector } from '../_shared/models/sector';
 import { ClockService } from '../_shared/clock.service';
+import { AuthGuard } from '../_api/services/auth-guard.service';
 
 @Component({
   selector: 'app-sectors',
-  templateUrl: './sectors.component.html'
+  templateUrl: './sectors.component.html',
+  styleUrls: ['./sectors.component.css']
 })
 
 export class SectorsComponent extends SubscriberEntity implements OnInit  {
@@ -16,9 +18,9 @@ export class SectorsComponent extends SubscriberEntity implements OnInit  {
   public displayedColumns = ['sectorName', 'percentChange'];
   constructor(
     private clockService: ClockService,
-    private sectorMonitorService: SectorMonitorService) {
+    private sectorMonitorService: SectorMonitorService,
+    private auth: AuthGuard) {
       super();
-
    }
 
   public ngOnInit(): void {
@@ -36,6 +38,8 @@ export class SectorsComponent extends SubscriberEntity implements OnInit  {
   }
 
   private updateSectors(): void {
-    this.sectorMonitorService.getSectorInfo().subscribe((sectors) => this.sectors = sectors);
+    if (this.auth.isLoggedIn()) {
+        this.sectorMonitorService.getSectorInfo().subscribe((sectors) => this.sectors = sectors);
+    }
   }
 }
