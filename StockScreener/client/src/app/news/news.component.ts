@@ -13,8 +13,9 @@ import { AuthGuard } from '../_api/services/auth-guard.service';
 
 export class NewsComponent extends SubscriberEntity implements OnInit  {
   public news: News[] = [];
-  private updateNewsTimeInSeconds = 30;
+  private updateNewsTimeInSeconds = 180;
   private secondsRemainingUntilNextUpdate = 0;
+//   public displayedColumns = ['headline', 'source', 'image'];
   public displayedColumns = ['headline', 'source'];
   constructor(
     private clockService: ClockService,

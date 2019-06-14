@@ -1,12 +1,9 @@
-.app {
-    margin: 10px;
-}
 .web-app-container:after {
     position: fixed;
     content : "";
     top: 0;
 	left: 0;
-	width: 100%;
+	width: 100% !important;
 	height: 100%;
 	z-index: -1;
     background: url(../../assets/wall_street.jpg) no-repeat center center fixed;

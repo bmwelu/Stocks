@@ -16,7 +16,16 @@ export class AuthGuard implements CanActivate {
     return false;
   }
   public isLoggedIn(): boolean {
-    return this.getToken() !== null;
+    const token = localStorage.getItem('jwt');
+    if (token === null) {
+        return false;
+    }
+    if (token !== null && this.jwtHelper.isTokenExpired(token)) {
+        localStorage.removeItem('jwt');
+        this.router.navigate(['login']);
+        return false;
+    }
+    return true;
   }
   public getToken(): string | null {
     return localStorage.getItem('jwt');

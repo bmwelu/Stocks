@@ -6,3 +6,10 @@
     text-align:center;
 	font-family: Tahoma;
 }
+
+@media only screen and (max-width: 600px) {
+    .sectors-card {
+        width: 100%;
+        margin: 12px;
+    }
+}

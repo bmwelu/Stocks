@@ -4,20 +4,24 @@
     </mat-card-header>
     <mat-card-content>
             <div class="mat-elevation-z8">
-                    <!-- <table class="table table-rounded stock-table" [hidden]="stocks.length === 0"> -->
-                    <mat-table [dataSource]="news" *ngIf="news?.length > 0">
-                    <!-- Sector Name Column -->
+                <mat-table [dataSource]="news" *ngIf="news?.length > 0">
+                    <!-- News Title Column -->
                     <ng-container matColumnDef="headline">
                        <mat-header-cell *matHeaderCellDef> Headline </mat-header-cell>
-                       <mat-cell *matCellDef="let element"><a [href]="element.url" target="_blank" >{{element.headline}}</a></mat-cell>
+                       <mat-cell *matCellDef="let element"><a [href]="element.url" target="_blank" >{{element.title}}</a></mat-cell>
                     </ng-container>
-                    <!-- Percent Change Column -->
+                    <!-- Source Name Column -->
                     <ng-container matColumnDef="source">
                        <mat-header-cell *matHeaderCellDef> Source </mat-header-cell>
-                       <mat-cell *matCellDef="let element"> {{element.source}} </mat-cell>
+                       <mat-cell *matCellDef="let element"> {{element.source.name}} </mat-cell>
                     </ng-container>
+                    <!-- Image Column -->
+                    <!-- <ng-container matColumnDef="image">
+                        <mat-header-cell *matHeaderCellDef> Image </mat-header-cell>
+                        <mat-cell *matCellDef="let element"><img [src]="element.urltoimage"></mat-cell>
+                    </ng-container> -->
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                    </mat-table>
+                </mat-table>
             </div>
     </mat-card-content>
 </mat-card>

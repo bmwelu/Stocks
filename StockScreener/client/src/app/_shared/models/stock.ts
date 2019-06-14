@@ -1,4 +1,4 @@
-import { StockNews } from './stock-news';
+import { News } from './news';
 
 export interface Stock {
     companyName: string;
@@ -10,5 +10,5 @@ export interface Stock {
     week52High: string;
     week52Low: string;
     previousClose: string;
-    stockNews: StockNews[];
+    stockNews: News[];
 }

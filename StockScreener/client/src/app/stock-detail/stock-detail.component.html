@@ -59,8 +59,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let x of stockDetail.stockNews">
-                                <td><a [href]="x.url" target="_blank" >{{x.headline}}</a></td>    
-                                <td>{{x.source}}</td>     
+                                <td><a [href]="x.url" target="_blank" >{{x.title}}</a></td>    
+                                <td>{{x.source.name}}</td>     
                             </tr>
                         </tbody>
                     </table>

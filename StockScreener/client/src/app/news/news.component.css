@@ -7,3 +7,10 @@
     font-family: Tahoma;
     max-width: 500px;
 }
+
+@media only screen and (max-width: 600px) {
+    .news-card {
+        width: 100%;
+        margin: 12px;
+    }
+}

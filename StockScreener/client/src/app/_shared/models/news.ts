@@ -1,6 +1,6 @@
 export interface News {
-    headline: string;
+    title: string;
     url: string;
-    source: string;
-    image: string;
+    source: object;
+    urltoimage: string;
 }

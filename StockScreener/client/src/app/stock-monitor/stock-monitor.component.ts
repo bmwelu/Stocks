@@ -6,6 +6,7 @@ import { StockComponentSharedService } from '../_shared/stock-component-shared.s
 import { Stock } from '../_shared/models/stock';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import 'rxjs/add/operator/takeUntil';
+import { AuthGuard } from '../_api/services/auth-guard.service';
 
 @Component({
   selector: 'app-stock-monitor',
@@ -25,7 +26,8 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     private clockService: ClockService,
     private stockMonitorService: StockMonitorService,
     private toastr: ToastsManager,
-    private stockComponentSharedService: StockComponentSharedService) {
+    private stockComponentSharedService: StockComponentSharedService,
+    private auth: AuthGuard) {
         super();
     }
 
@@ -45,20 +47,22 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   }
 
   private updateStocks(stocks: Stock[]): void {
-    if (stocks.length <= 0) {
-        return;
-      }
-      const stockSymbols = stocks.map((s) => s.symbol);
-      const request = this.stockMonitorService.getStocks(stockSymbols);
-      request.subscribe((returnedStocks) => {
-        for (const stock of returnedStocks) {
-          const stockToUpdate = stocks.find((st) => st.symbol === stock.symbol);
-          if (stockToUpdate !== undefined) {
-            stockToUpdate.latestPrice = stock.latestPrice;
-            stockToUpdate.percentChange = stock.percentChange;
-          }
+    if (this.auth.isLoggedIn()) {
+        if (stocks.length <= 0) {
+            return;
         }
-      });
+        const stockSymbols = stocks.map((s) => s.symbol);
+        const request = this.stockMonitorService.getStocks(stockSymbols);
+        request.subscribe((returnedStocks) => {
+            for (const stock of returnedStocks) {
+                const stockToUpdate = stocks.find((st) => st.symbol === stock.symbol);
+                if (stockToUpdate !== undefined) {
+                    stockToUpdate.latestPrice = stock.latestPrice;
+                    stockToUpdate.percentChange = stock.percentChange;
+                }
+            }
+        });
+    }
   }
 
   public getTickerInfo(ticker: string): void {
