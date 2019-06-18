@@ -18,11 +18,8 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 // Third party
-import { PopoverModule } from 'ngx-popover';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { ChartsModule } from 'ng2-charts';
-import { CustomToastOptions } from './_core/custom-toast-message-options';
-import { ToastOptions } from 'ng2-toastr';
 import { JwtHelper } from 'angular2-jwt';
 
 // Services
@@ -40,6 +37,9 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material';
 import {MatListModule} from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -54,24 +54,26 @@ import {MatButtonModule} from '@angular/material/button';
   ],
   imports: [
     BrowserModule,
-    PopoverModule,
     FormsModule,
     HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ToastModule.forRoot(),
+    ToastrModule.forRoot(),
     ChartsModule,
     MatTableModule,
     MatGridListModule,
     MatCardModule,
     MatListModule,
     MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatTabsModule,
     RouterModule.forRoot([
         { path: '', component: AppComponent, pathMatch: 'full', canActivate: [AuthGuard] },
         { path: 'login', component: LoginComponent }
       ])
   ],
-  providers: [{provide: ToastOptions, useClass: CustomToastOptions},
+  providers: [
      ClockService, StockMonitorService, StockComponentSharedService,
      SectorMonitorService, NewsMonitorService, LoginService,
      JwtHelper, AuthGuard],

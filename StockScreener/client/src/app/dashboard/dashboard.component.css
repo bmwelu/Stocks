@@ -1,18 +1,8 @@
-.web-app-container:after {
-    position: fixed;
-    content : "";
-    top: 0;
-	left: 0;
-	width: 100% !important;
-	height: 100%;
-	z-index: -1;
-    background: url(../../assets/wall_street.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    opacity : 0.4;
-}
 .logout-button {
+    background: none;
     float: right;
+    z-index: 99;
+}
+#dashboard-menu {
+    width: 100%;
 }

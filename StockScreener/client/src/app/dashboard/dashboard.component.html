@@ -1,6 +1,6 @@
-<div class="web-app-container app">
-    <p color="primary">
+<div>
+    <div id="dashboard-menu">
         <button  *ngIf="auth.isLoggedIn()" (click)="auth.logout()" mat-button class="logout-button">Logout</button>
-    </p>
+    </div>
     <router-outlet></router-outlet>
 </div>

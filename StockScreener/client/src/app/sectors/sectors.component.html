@@ -1,9 +1,9 @@
-<mat-card class="sectors-card mat-card-main mat-elevation-z24" *ngIf="sectors?.length > 0">
+<mat-card class="sectors-card" *ngIf="sectors?.length > 0">
         <mat-card-header>
             <mat-card-title> Real-Time Sector Performance </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-                <div class="mat-elevation-z8">
+                <div>
                         <!-- <table class="table table-rounded stock-table" [hidden]="stocks.length === 0"> -->
                         <mat-table [dataSource]="sectors" *ngIf="sectors?.length > 0">
                         <!-- Sector Name Column -->

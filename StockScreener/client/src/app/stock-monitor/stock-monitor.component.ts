@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ClockService } from '../_shared/clock.service';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
 import { Stock } from '../_shared/models/stock';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import 'rxjs/add/operator/takeUntil';
 import { AuthGuard } from '../_api/services/auth-guard.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material/';
 
 @Component({
   selector: 'app-stock-monitor',
   templateUrl: './stock-monitor.component.html',
-  styleUrls: ['./stock-monitor.component.css']
+  styleUrls: ['./stock-monitor.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   public stocks: Stock[] = [];
@@ -25,10 +28,15 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   constructor(
     private clockService: ClockService,
     private stockMonitorService: StockMonitorService,
-    private toastr: ToastsManager,
+    private toastr: ToastrService,
     private stockComponentSharedService: StockComponentSharedService,
-    private auth: AuthGuard) {
+    private auth: AuthGuard,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer) {
         super();
+        iconRegistry.addSvgIcon(
+            'info',
+            sanitizer.bypassSecurityTrustResourceUrl('../../assets/info-icon.svg'));
     }
 
   public ngOnInit(): void {
@@ -76,14 +84,20 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
         this.stocks = this.stocks.concat([this.selectedSuggestedStock]);
         this.updateStocks([this.selectedSuggestedStock]);
         this.stockComponentSharedService.setCachedStockList(this.stocks);
-        this.toastr.success('Stock was added to list below.', 'Success!');
+        this.toastr.success('Stock was added to list below.', 'Success!', {
+            positionClass: 'toast-top-center'
+          });
       } else {
         this.toastr.error(
-          `${this.selectedSuggestedStock.symbol}: ${this.selectedSuggestedStock.companyName} is already in the list.`, 'Error!');
+          `${this.selectedSuggestedStock.symbol}: ${this.selectedSuggestedStock.companyName} is already in the list.`, 'Error!', {
+            positionClass: 'toast-top-center'
+          });
       }
       this.cleanupSearch();
     } else {
-      this.toastr.error('Please select a stock from the suggested list.', 'Error!');
+      this.toastr.error('Please select a stock from the suggested list.', 'Error!', {
+        positionClass: 'toast-top-center'
+      });
     }
   }
 

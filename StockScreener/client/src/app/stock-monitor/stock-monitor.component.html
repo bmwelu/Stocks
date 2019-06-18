@@ -1,13 +1,13 @@
-<mat-card class="screener-card mat-card-main mat-elevation-z24">
+<mat-card class="screener-card">
         <mat-card-header>
             <mat-card-title> Stock Screener 
-                <a class="glyphicon glyphicon-question-sign" 
-                id="info" title="Stock Hours" 
-                popover="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  
-                Data will not refresh outside of these hours. Only stocks traded on NYSE and NASDAQ 
-                can currently be added."
-                [popoverOnHover]="true" [popoverCloseOnMouseOutside]="true">
-                </a>
+                    <mat-icon 
+                        svgIcon="info"
+                        matTooltip="Stock trading hours are from 8:30AM-3PM CST weekdays (exluding holidays).  
+                                    Data will not refresh outside of these hours."
+                        matTooltipClass="info-tooltip"
+                        id="info-icon">
+                    </mat-icon>
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
@@ -16,12 +16,12 @@
                 (ngModelChange)="getSuggestedStocks(searchString)" maxlength="35" />
                 <a (click)="addStock()"><img src="/assets/plus.ico" height="20" width="20"/></a>
             </div>
-            <div style="height:115px">
+            <div style="height:50px">
                 <ol class="suggested-stocks" *ngIf="suggestedStocks && suggestedStocks.length > 0">
                     <li *ngFor="let stock of suggestedStocks" (click)="suggestedStockSelected(stock)">{{stock.symbol}} : {{stock.companyName}}</li>
                 </ol>
             </div>
-            <div class="mat-elevation-z8" [hidden]="stocks.length === 0">
+            <div [hidden]="stocks.length === 0">
                 <mat-table [dataSource]="stocks">
                 <!-- Company Name Column -->
                 <ng-container matColumnDef="companyName">
@@ -31,7 +31,7 @@
                 <!-- Symbol Column -->
                 <ng-container matColumnDef="symbol">
                     <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a (click)="getTickerInfo(element.symbol)" style="cursor: pointer">{{element.symbol}}</a> </mat-cell>
+                    <mat-cell *matCellDef="let element"> <a [style.color]="'blue'" (click)="getTickerInfo(element.symbol)" style="cursor: pointer">{{element.symbol}}</a> </mat-cell>
                 </ng-container>
                 <!-- Latest Price Column -->
                 <ng-container matColumnDef="latestPrice">

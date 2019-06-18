@@ -1,7 +1,7 @@
 
-<mat-card class="stock-detail-card mat-elevation-z24 stock-detail" *ngIf="showDetail">
+<mat-card class="stock-detail-card stock-detail" *ngIf="showDetail">
     <mat-card-content>
-        <div class="mat-elevation-z8">
+        <div>
             <div *ngIf="stockDetail">
                 {{stockDetail.companyName}} ({{stockDetail.symbol}})
                 <a class="detail-exit-button" (click)="hideStockDetails()">

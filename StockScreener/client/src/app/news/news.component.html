@@ -1,14 +1,14 @@
-<mat-card class="news-card mat-card-main mat-elevation-z24" *ngIf="news?.length > 0">
+<mat-card class="news-card" *ngIf="news?.length > 0">
     <mat-card-header>
         <mat-card-title> Market News </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-            <div class="mat-elevation-z8">
+            <div>
                 <mat-table [dataSource]="news" *ngIf="news?.length > 0">
                     <!-- News Title Column -->
                     <ng-container matColumnDef="headline">
                        <mat-header-cell *matHeaderCellDef> Headline </mat-header-cell>
-                       <mat-cell *matCellDef="let element"><a [href]="element.url" target="_blank" >{{element.title}}</a></mat-cell>
+                       <mat-cell *matCellDef="let element"><a [style.color]="'blue'" [href]="element.url" target="_blank" >{{element.title}}</a></mat-cell>
                     </ng-container>
                     <!-- Source Name Column -->
                     <ng-container matColumnDef="source">
