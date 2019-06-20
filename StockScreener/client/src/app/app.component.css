@@ -1,10 +1,3 @@
-:host ::ng-deep .mat-cell, .mat-footer-cell, .mat-header-cell {
-    display: inline-grid !important;
-}
-:host ::ng-deep .mat-table {
-    background: white;
-    border-radius: 20px;
-}
-:host ::ng-deep .mat-table .mat-row:last-child { 
-    border-bottom: none !important; 
+.app-tabs {
+    width: 100%;
 }

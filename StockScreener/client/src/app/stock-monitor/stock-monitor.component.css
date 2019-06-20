@@ -32,7 +32,7 @@
 }
 .search-bar {
 	background-color:black;
-	width: 382px;
+	width: 350px;
 	padding: 2px;
 	margin: 0 auto 0px;
 	border-radius: 25px;
@@ -41,7 +41,7 @@
 .search-bar a {
 	position:absolute;
 	bottom: 23px;
-	left: 350px;
+	left: 318px;
 	width: 10px;
     height: 10px;
 }
@@ -93,6 +93,13 @@
     .screener-card {
         margin: 0 auto;
         padding: 0px !important;
+        width: 100%;
+    }
+    .search-bar {
+        width: 100%;
+    }
+    .search-bar a {
+        left: calc(100% - 32px);
     }
 }
 #info-icon {
@@ -100,12 +107,12 @@
     height: 20px;
     width: 20px;
 }
-.info-tooltip {
-    background: #738289;
+.mat-cell, .mat-footer-cell, .mat-header-cell {
+    justify-content: center !important;
 }
-.mat-tooltip-panel {
-    position: relative !important;
-    z-index: 99 !important;
-    width: 300px !important;
-    height: 0px !important;
+.mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
+    padding-left: 0px !important;
+}
+.mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
+    padding-right: 0px !important;
 }

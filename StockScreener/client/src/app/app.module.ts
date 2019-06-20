@@ -40,6 +40,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -68,10 +69,14 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatIconModule,
     MatTooltipModule,
     MatTabsModule,
+    MatDialogModule,
     RouterModule.forRoot([
         { path: '', component: AppComponent, pathMatch: 'full', canActivate: [AuthGuard] },
         { path: 'login', component: LoginComponent }
       ])
+  ],
+  entryComponents: [
+    StockDetailComponent
   ],
   providers: [
      ClockService, StockMonitorService, StockComponentSharedService,

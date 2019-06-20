@@ -1,6 +1,9 @@
 <div>
     <div id="dashboard-menu">
-        <button  *ngIf="auth.isLoggedIn()" (click)="auth.logout()" mat-button class="logout-button">Logout</button>
+        <div></div>
+        <div style="float: right">
+            <button  *ngIf="auth.isLoggedIn()" (click)="auth.logout()" mat-button class="logout-button">Logout</button>
+        </div>        
     </div>
     <router-outlet></router-outlet>
 </div>

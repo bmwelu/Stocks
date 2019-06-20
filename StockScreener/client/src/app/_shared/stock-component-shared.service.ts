@@ -17,7 +17,7 @@ export class StockComponentSharedService {
   public tickerStream = this.ticker.asObservable();
 
   // Service message commands
-  public updateTicker(ticker: string): void {
+  public updateTimeSeriesValues(ticker: string): void {
     // Cache all graph data
     Observable.zip(this.stockMonitorService.getStockTimeSeriesData(ticker, 0),
                    this.stockMonitorService.getStockTimeSeriesData(ticker, 1),

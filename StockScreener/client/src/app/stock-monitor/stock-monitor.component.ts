@@ -1,20 +1,22 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClockService } from '../_shared/clock.service';
 import { StockMonitorService } from '../_api/services/stock-monitor.service';
 import { ToastrService } from 'ngx-toastr';
 import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
 import { Stock } from '../_shared/models/stock';
 import { SubscriberEntity } from '../_core/subscriber-entity';
+import { take } from 'rxjs/operators';
 import 'rxjs/add/operator/takeUntil';
 import { AuthGuard } from '../_api/services/auth-guard.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MatIconRegistry} from '@angular/material/';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/';
+import { MatDialog } from '@angular/material';
+import { StockDetailComponent } from '../stock-detail/stock-detail.component';
 
 @Component({
   selector: 'app-stock-monitor',
   templateUrl: './stock-monitor.component.html',
-  styleUrls: ['./stock-monitor.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./stock-monitor.component.css']
 })
 export class StockMonitorComponent extends SubscriberEntity implements OnInit {
   public stocks: Stock[] = [];
@@ -31,6 +33,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     private toastr: ToastrService,
     private stockComponentSharedService: StockComponentSharedService,
     private auth: AuthGuard,
+    public dialog: MatDialog,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer) {
         super();
@@ -73,8 +76,46 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
   }
 
-  public getTickerInfo(ticker: string): void {
-    this.stockComponentSharedService.updateTicker(ticker);
+  public showStockDetail(ticker: string): void {
+    // this.stockComponentSharedService.updateTimeSeriesValues(ticker);
+    // this.stockComponentSharedService.tickerStream
+    // .subscribe(() => {
+    //     const intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(ticker, 0).length > 0;
+    //     const dailyChartAvailable = this.stockComponentSharedService.getCachedStockData(ticker, 1).length > 0;
+    //     const weeklyChartAvailable = this.stockComponentSharedService.getCachedStockData(ticker, 2).length > 0;
+    //     const monthlyChartAvailable = this.stockComponentSharedService.getCachedStockData(ticker, 3).length > 0;
+    //     this.stockComponentSharedService.getStockDetail(ticker).subscribe((results) => {
+    //         const dialogRef = this.dialog.open(StockDetailComponent,
+    //         {
+    //             data: {
+    //                       ticker: ticker, stockDetail: results, intraDayChartAvailable: intraDayChartAvailable,
+    //                       dailyChartAvailable: dailyChartAvailable, weeklyChartAvailable: weeklyChartAvailable,
+    //                       monthlyChartAvailable: monthlyChartAvailable
+    //                   }
+    //         });
+    //         dialogRef.afterClosed().pipe(take(1)).subscribe();
+    //     });
+    //   });
+    const st: any = {
+        companyName: 'testCompany',
+        symbol: 'xxx',
+        percentChange: '111',
+        latestPrice: '222',
+        primaryExchange: 'primExchange',
+        sector: 'sectorName',
+        week52High: 'soDamnHigh',
+        week52Low: 'soDamnLow',
+        previousClose: 'lastCloseSucked'
+    };
+    const dialogRef = this.dialog.open(StockDetailComponent,
+            {
+                data: {
+                          ticker: 'xxx', stockDetail: st, intraDayChartAvailable: false,
+                          dailyChartAvailable: false, weeklyChartAvailable: false,
+                          monthlyChartAvailable: false
+                      }
+            });
+            dialogRef.afterClosed().pipe(take(1)).subscribe();
   }
 
   public addStock(): void {
@@ -108,7 +149,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
 
   public getSuggestedStocks(searchString: string): void {
     this.cleanupSearch(searchString);
-    if (typeof searchString !== 'undefined' && searchString) {
+    if (typeof searchString !== 'undefined' && searchString ) {
       this.stockMonitorService.getSuggestedStocks(searchString).subscribe((suggestedStocks) => {
           this.suggestedStocks = suggestedStocks;
       });
@@ -117,7 +158,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
     }
   }
 
-  public suggestedStockSelected(stock?: Stock): void {
+  public suggestedStockSelected(stock ?: Stock): void {
       if (stock) {
         this.searchString = stock.symbol + ': ' + stock.companyName;
         this.selectedSuggestedStock = stock;
@@ -125,7 +166,7 @@ export class StockMonitorComponent extends SubscriberEntity implements OnInit {
       }
   }
 
-  private cleanupSearch(searchString?: string): void {
+  private cleanupSearch(searchString ?: string): void {
     this.selectedSuggestedStock = undefined;
     this.searchString = searchString ? searchString : '';
     this.suggestedStocks = [];

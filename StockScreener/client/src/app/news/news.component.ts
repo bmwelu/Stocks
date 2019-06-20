@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { NewsMonitorService } from '../_api/services/news-monitor.service';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import { News } from '../_shared/models/news';
@@ -8,8 +8,7 @@ import { AuthGuard } from '../_api/services/auth-guard.service';
 @Component({
   selector: 'app-news',
   templateUrl: './news.component.html',
-  styleUrls: ['./news.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./news.component.css']
 })
 
 export class NewsComponent extends SubscriberEntity implements OnInit  {

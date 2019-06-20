@@ -11,6 +11,10 @@
 @media only screen and (max-width: 600px) {
     .news-card {
         width: 100%;
-        margin: 12px;
+        margin: 0px;
+        margin-top: 10px;
     }
+}
+.mat-cell, .mat-footer-cell, .mat-header-cell {
+    justify-content: center !important;
 }

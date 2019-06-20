@@ -1,9 +1,8 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Inject} from '@angular/core';
 import { StockComponentSharedService } from '../_shared/stock-component-shared.service';
 import { ChartComponent } from '../_shared/chart/chart.component';
-import { SubscriberEntity } from '../_core/subscriber-entity';
 import { Stock } from '../_shared/models/stock';
-import 'rxjs/add/operator/takeUntil';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-stock-detail',
@@ -11,46 +10,35 @@ import 'rxjs/add/operator/takeUntil';
   styleUrls: ['./stock-detail.component.css']
 })
 
-export class StockDetailComponent extends SubscriberEntity implements OnInit  {
-  public showDetail = false;
-  public ticker = '';
+export class StockDetailComponent {
   public chart: ChartComponent;
-  public stockDetail: Stock | undefined;
-  public intraDayChartAvailable = false;
-  public dailyChartAvailable = false;
-  public weeklyChartAvailable = false;
-  public monthlyChartAvailable = false;
+  public ticker: string;
+  public stockDetail: Stock;
+  public intraDayChartAvailable: boolean;
+  public dailyChartAvailable: boolean;
+  public weeklyChartAvailable: boolean;
+  public monthlyChartAvailable: boolean;
   constructor(
-    private stockComponentSharedService: StockComponentSharedService) {
-      super();
+    private stockComponentSharedService: StockComponentSharedService,
+    public dialogRef: MatDialogRef<StockDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
       this.chart = new ChartComponent();
-      stockComponentSharedService.tickerStream
-        .takeUntil(this.destroyed)
-        .subscribe(
-          (ticker) => {
-            this.ticker = ticker;
-            this.generateStockDetail(ticker);
-            // Determine which charts are available based on whether or not data is available
-            this.intraDayChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 0).length > 0;
-            this.dailyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 1).length > 0;
-            this.weeklyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 2).length > 0;
-            this.monthlyChartAvailable = this.stockComponentSharedService.getCachedStockData(this.ticker, 3).length > 0;
-            this.intraDayChartAvailable ? this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
-              this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0)) :
-              this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 1),
-              this.stockComponentSharedService.getCachedStockLabels(this.ticker, 1));
-            this.showDetail = true;
-        });
+      this.ticker = data.ticker;
+      this.stockDetail = data.stockDetail;
+      this.intraDayChartAvailable = data.intraDayChartAvailable;
+      this.dailyChartAvailable = data.dailyChartAvailable;
+      this.weeklyChartAvailable = data.weeklyChartAvailable;
+      this.monthlyChartAvailable = data.monthlyChartAvailable;
+    //   this.intraDayChartAvailable ? this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 0),
+    //   this.stockComponentSharedService.getCachedStockLabels(this.ticker, 0)) :
+    //   this.generateChart(this.stockComponentSharedService.getCachedStockData(this.ticker, 1),
+    //   this.stockComponentSharedService.getCachedStockLabels(this.ticker, 1));
    }
-
-  public ngOnInit(): void {
-    this.showDetail = false;
-  }
 
   public hideStockDetails(): void {
     this.chart.populateData([], []);
-    this.showDetail = false;
     this.stockComponentSharedService.clearTicker(this.ticker);
+    this.dialogRef.close();
   }
 
   public changeChartTimeSpan(interval: number): void {
@@ -60,10 +48,5 @@ export class StockDetailComponent extends SubscriberEntity implements OnInit  {
 
   public generateChart(data: number[], labels: string[]): void {
     this.chart.populateData(data, labels);
-  }
-
-  private generateStockDetail(ticker: string): void {
-      this.stockComponentSharedService.getStockDetail(ticker).subscribe(
-          (stockDetail) => this.stockDetail = stockDetail);
   }
 }

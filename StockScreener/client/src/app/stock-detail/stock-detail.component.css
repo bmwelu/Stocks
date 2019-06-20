@@ -1,13 +1,7 @@
 .stock-detail {
-    position: absolute !important;
-    top: 10%;
     font-family: Tahoma;
-    z-index: 2;
-    margin: 30px;
-    float: left;
     padding: 10px !important;
     text-align: center;
-    background-color: white;
 }
 
 .stock-detail-info {
@@ -71,4 +65,10 @@
     text-align: left;
     min-width: 125px;
     text-align: center;
+}
+
+#detail-modal {
+    padding: 0 !important;
+    max-height: 930px !important;
+    overflow: none !important;
 }

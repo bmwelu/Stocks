@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SectorMonitorService } from '../_api/services/sector-monitor.service';
 import { SubscriberEntity } from '../_core/subscriber-entity';
 import { Sector } from '../_shared/models/sector';
@@ -8,8 +8,7 @@ import { AuthGuard } from '../_api/services/auth-guard.service';
 @Component({
   selector: 'app-sectors',
   templateUrl: './sectors.component.html',
-  styleUrls: ['./sectors.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./sectors.component.css']
 })
 
 export class SectorsComponent extends SubscriberEntity implements OnInit  {
